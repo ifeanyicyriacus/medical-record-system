@@ -14,5 +14,6 @@ public class Doctor extends User {
     @Id
     private String            id;
     private Specialization    specialization;
-    private List<Appointment> appointment;
+//    private List<Appointment> appointment;
+
 }
