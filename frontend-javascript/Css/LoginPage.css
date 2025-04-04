@@ -8,6 +8,14 @@ body {
     background-color: #5C73DA;
 }
 
+
+#error-message{
+    color: red;
+    font-size: 20px;
+    margin: 50px auto;
+    padding: 0 50px;
+}
+
 #myForm {
     width: 300px;
     margin: 50px auto;
@@ -25,6 +33,18 @@ label {
     display: block;
     margin-bottom: 5px;
     color: white;
+}
+
+.sign-up{
+    display: flex;
+    color: white;
+    padding-left: 500px;
+    font-size: 15px;
+}
+
+.sign-up-text a{
+    text-decoration: None;
+    color: blue;
 }
 
 
@@ -141,13 +161,20 @@ button:hover {
     .navBar ul li {
         margin: 10px 0;
     }
+
+    .navLinks a{
+            display: block;
+            font-size: 18px;
+
+    }
+    }
     .hero h1 {
         font-size: 28px;
     }
     .about p {
         font-size: 16px;
     }
-}
+
 @media (max-width: 480px) {
     #myForm {
         width: 95%;
