@@ -1,7 +1,7 @@
 package com.onemedic.controllers;
 
 import com.onemedic.models.Patient;
-import com.onemedic.services.impl.PatientServiceImpl;
+import com.onemedic.services.PatientServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
