@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../Css/LoginPage.css">
+    <script src="../javaScript/login.js" defer></script>
+</head>
+<body>
+    <div class="login">
+        <div class="navBar">
+            <div class="logo">
+                <img src="../image/logo.png" alt="">
+                <p>saving lives</p>
+            </div>
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+            <div class="navLinks">
+                <ul>
+                    <li><a href="HomePage.html"> Home</a></li>
+                    <li><a href="#"> About us</a></li>
+                    <li><a href="#"> Contact us</a></li>
+                    <li><a href="#"> Blog</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="error-message"> </div>
+            <form id="myForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <input type="text" id="password" name="password" required>
+
+                <button type="submit">Log in</button>
+            </form>
+        <div class="sign-up">
+            <p>Don't have an account? <p class="sign-up-text"><a href="Register.html">Sign up</a></p>
+        </div>
+        <div class="about-us">
+
+        </div>
+
+    </div>
+</body>
+</html>
