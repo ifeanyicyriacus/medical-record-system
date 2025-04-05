@@ -23,8 +23,8 @@ class Config:
     
     # CORS Configuration
     CORS_HEADERS = ['Content-Type', 'Authorization']
-    CORS_ORIGINS = "*"  
-    CORS_SUPPORTS_CREDENTIALS = True 
+    CORS_ORIGINS = "*"  # Allow all origins
+    CORS_SUPPORTS_CREDENTIALS = True  # Allow credentials
     
     @staticmethod
     def init_app(app):
