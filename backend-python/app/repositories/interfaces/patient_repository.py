@@ -14,3 +14,15 @@ class IPatientRepository(ABC):
     @abstractmethod
     def view_appointments(self) -> List[dict]:
         pass
+    
+    @abstractmethod
+    def find_by_email(self, email: str) -> Optional[Patient]:
+        pass
+    
+    @abstractmethod
+    def update_profile(self, patient_id: str, data: dict) -> bool:
+        pass
+    
+    @abstractmethod
+    def change_password(self, patient_id: str, new_password: str) -> bool:
+        pass
