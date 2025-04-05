@@ -24,8 +24,6 @@ public class InitialAdminConfig {
 
     @Bean
     public CommandLineRunner createInitialAdmin() {
-        return args -> {
-            superAdminService.createSuperAdminIfNotExist(superAdminEmail, superAdminPassword, role);
-        };
+        return _ -> superAdminService.createSuperAdminIfNotExist(superAdminEmail, superAdminPassword, role);
     }
 }

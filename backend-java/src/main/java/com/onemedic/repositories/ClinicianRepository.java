@@ -1,6 +1,5 @@
 package com.onemedic.repositories;
 
-import com.onemedic.models.Admin;
 import com.onemedic.models.Clinician;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

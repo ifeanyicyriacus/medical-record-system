@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/doctors")
+@RequestMapping("/api/clinicians")
 public class ClinicianController {
     private ClinicianService clinicianService;
 
@@ -18,8 +18,4 @@ public class ClinicianController {
         this.clinicianService = clinicianService;
     }
 
-    @GetMapping
-    public Page<Clinician> getAllClinicians(Pageable pageable) {
-        return clinicianService.getAllPatients(pageable);
-    }
 }

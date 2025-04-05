@@ -8,5 +8,5 @@ public interface PatientService {
     Patient updatePatient(Patient patient);
     Appointment createAppointment(Appointment appointment);
     Appointment updateAppointment(Appointment appointment);
-    MedicalRecord getMyMedicalRecord(String id);
+    MedicalRecord getPatientMedicalRecord(String patientId);
 }
