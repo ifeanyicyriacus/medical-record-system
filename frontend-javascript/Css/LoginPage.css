@@ -35,6 +35,20 @@ label {
     color: white;
 }
 
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 36px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+}
+
 .sign-up{
     display: flex;
     color: white;
