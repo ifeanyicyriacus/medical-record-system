@@ -1,5 +1,7 @@
 package com.onemedic.services;
 
+import com.onemedic.models.User;
+
 public interface AuthenticationService {
-    Object login(String username, String password);
+    User login(String username, String password);
 }

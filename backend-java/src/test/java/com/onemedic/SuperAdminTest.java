@@ -2,8 +2,6 @@ package com.onemedic;
 
 import com.onemedic.models.Admin;
 import com.onemedic.repositories.AdminRepository;
-import com.onemedic.services.AdminService;
-import com.onemedic.services.AdminServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +21,7 @@ public class SuperAdminTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 //    @Autowired
-//    private AdminServiceImpl adminService;
+//    private SuperAdminServiceImpl adminService;
 
 
     @Test
@@ -33,6 +31,7 @@ public class SuperAdminTest {
         assertEquals("SUPER_ADMIN", admin.get().getRole());
         assertTrue(passwordEncoder.matches("testStrongPassword123!", admin.get().getPassword()));
     }
+
 
 //    @Test
 //    void thatSuperAdminCanLogin() {

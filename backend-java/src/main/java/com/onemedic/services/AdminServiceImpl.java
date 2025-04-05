@@ -1,39 +1,60 @@
 package com.onemedic.services;
 
 import com.onemedic.models.Admin;
+import com.onemedic.models.Clinician;
 import com.onemedic.repositories.AdminRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.onemedic.repositories.ClinicianRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class AdminServiceImpl implements AdminService, AuthenticationService {
+public class AdminServiceImpl implements AdminService {
+    private final ClinicianRepository clinicianRepository;
     private final AdminRepository adminRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    @Override
-    @Transactional
-    public void createSuperAdminIfNotExist(String email, String rawPassword, String role) {
-        if (!adminRepository.existsByEmail(email)) {
-            Admin admin = new Admin();
-            admin.setEmail(email);
-            admin.setPassword(passwordEncoder.encode(rawPassword));
-            admin.setRole(role);
-            adminRepository.save(admin);
-        }
+    public AdminServiceImpl(ClinicianRepository clinicianRepository, AdminRepository adminRepository) {
+        this.clinicianRepository = clinicianRepository;
+        this.adminRepository = adminRepository;
     }
 
     @Override
-    public Admin login(String email, String password) {
-        Optional<Admin> admin = adminRepository.findByEmail(email);
-        if (admin.isPresent()) {
-            if (passwordEncoder.matches(password, admin.get().getPassword())) {
-                return admin.get();
-            }else return null;
-        } else return null;
+    public Clinician createClinician(Clinician clinician) {
+        return clinicianRepository.save(clinician);
+    }
+
+    @Override
+    public Page<Clinician> getAllClinicians(Pageable pageable) {
+        return clinicianRepository.findAll(pageable);
+    }
+
+    @Override
+    public Clinician getClinicianById(String id) {
+        return clinicianRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Clinician getByEmail(String email) {
+        return clinicianRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public Clinician updateClinician(Clinician clinician) {
+        return clinicianRepository.save(clinician);
+    }
+
+    @Override
+    public Admin updateAdmin(Admin admin) {
+        return adminRepository.save(admin);
+    }
+
+    @Override
+    public Admin getAdminByEmail(String email) {
+        return adminRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public Admin getAdminById(String id) {
+        return adminRepository.findById(id).orElse(null);
     }
 }
