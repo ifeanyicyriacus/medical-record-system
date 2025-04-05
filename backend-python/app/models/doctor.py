@@ -1,16 +1,11 @@
 from mongoengine import ReferenceField, ListField, EnumField
-from app.models.user import User
-from app.models.user_type import UserType
-from app.models.specialization import Specialization
+from .user import User
+from .specialization import Specialization
+from .appointment import Appointment
 
 class Doctor(User):
-    meta = {
-        'collection': 'doctors'
-    }
+    meta = {'collection': 'doctors'}
     
+    doctor_id = StringField(required=True, unique=True)
     specialization = EnumField(Specialization, required=True)
-    appointments = ListField(ReferenceField('Appointment'))
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type = UserType.DOCTOR
+    appointments = ListField(ReferenceField(Appointment))

@@ -1,7 +1,5 @@
-from datetime import datetime
 from mongoengine import Document, StringField, DateTimeField, EnumField
-from app.models.gender import Gender
-from app.models.user_type import UserType
+from .gender import Gender
 
 class User(Document):
     meta = {
@@ -11,11 +9,8 @@ class User(Document):
     
     first_name = StringField(required=True)
     last_name = StringField(required=True)
-    email = StringField(required=True, unique=True)
-    phone = StringField()
-    date_of_birth = DateTimeField()
+    hash_password = StringField(required=True)
+    phone_number = StringField()
+    email_address = StringField(required=True, unique=True)
+    dob = DateTimeField()
     gender = EnumField(Gender)
-    type = EnumField(UserType, required=True)
-    
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"

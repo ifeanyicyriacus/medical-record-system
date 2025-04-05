@@ -1,15 +1,9 @@
-from mongoengine import ReferenceField, ListField, EmbeddedDocumentField
-from app.models.user import User
-from app.models.user_type import UserType
+from mongoengine import ReferenceField, ListField
+from .user import User
+from .appointment import Appointment
 
 class Patient(User):
-    meta = {
-        'collection': 'patients'
-    }
+    meta = {'collection': 'patients'}
     
-    appointments = ListField(ReferenceField('Appointment'))
-    medical_record = EmbeddedDocumentField('MedicalRecord')
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.type = UserType.PATIENT
+    patient_id = StringField(required=True, unique=True)
+    appointments = ListField(ReferenceField(Appointment))
