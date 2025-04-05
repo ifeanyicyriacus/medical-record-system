@@ -1,0 +1,9 @@
+from enum import Enum
+
+class Specialization(Enum):
+    GENERAL_PRACTICE = "GENERAL_PRACTICE"
+    PEDIATRICS = "PEDIATRICS"
+    CARDIOLOGY = "CARDIOLOGY"
+    ONCOLOGY = "ONCOLOGY"
+    NEUROLOGY = "NEUROLOGY"
+    OTHERS = "OTHERS"
