@@ -1,4 +1,5 @@
 from typing import List
+from datetime import datetime
 from app.models.appointment import Appointment
 from .interfaces.appointment_repository import IAppointmentRepository
 
@@ -41,5 +42,11 @@ class AppointmentRepository(IAppointmentRepository):
                 "patient": str(appointment.patient.id),
                 "status": appointment.appointment_status.value
             } for appointment in appointments]
+        except Exception as e:
+            return []
+    
+    def find_by_date_range(self, start_date: datetime, end_date: datetime) -> List[Appointment]:
+        try:
+            return Appointment.objects(date__gte=start_date, date__lte=end_date)
         except Exception as e:
             return []
