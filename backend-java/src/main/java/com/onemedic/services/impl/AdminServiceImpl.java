@@ -1,9 +1,10 @@
-package com.onemedic.services;
+package com.onemedic.services.impl;
 
 import com.onemedic.models.Admin;
 import com.onemedic.models.Clinician;
 import com.onemedic.repositories.AdminRepository;
 import com.onemedic.repositories.ClinicianRepository;
+import com.onemedic.services.AdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

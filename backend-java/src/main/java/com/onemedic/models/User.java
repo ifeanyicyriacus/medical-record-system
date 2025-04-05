@@ -16,5 +16,4 @@ public abstract class User {
     private String    phoneNumber;
     private LocalDate date0fBirth;
     private Gender    gender;
-//    private UserType type;
 }

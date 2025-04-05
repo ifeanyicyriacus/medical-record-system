@@ -1,10 +1,12 @@
-package com.onemedic.services;
+package com.onemedic.services.impl;
 
 import com.onemedic.models.Admin;
 import com.onemedic.models.Gender;
-import com.onemedic.models.User;
 import com.onemedic.repositories.AdminRepository;
-import lombok.RequiredArgsConstructor;
+import com.onemedic.repositories.ClinicianRepository;
+import com.onemedic.services.SuperAdminService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 @Service
-@RequiredArgsConstructor
-public class SuperAdminServiceImpl implements SuperAdminService, AuthenticationService {
+public class SuperAdminServiceImpl extends AdminServiceImpl implements SuperAdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public SuperAdminServiceImpl(ClinicianRepository clinicianRepository, AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+        super(clinicianRepository, adminRepository);
+        this.adminRepository = adminRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional
@@ -40,7 +47,7 @@ public class SuperAdminServiceImpl implements SuperAdminService, AuthenticationS
     }
 
     @Override
-    public User login(String username, String password) {
-        return null;
+    public Page<Admin> getAdmins(Pageable pageable) {
+        return adminRepository.findAll(pageable);
     }
 }

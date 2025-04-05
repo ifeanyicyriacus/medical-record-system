@@ -17,5 +17,4 @@ public interface ClinicianService {
     MedicalRecord getPatientMedicalRecord(String patientId);
     Clinician updateClinician(Clinician clinician);
     MedicalRecord.MedicalNote addMedicalNoteToRecord(MedicalRecord.MedicalNote medicalNote, String patientId);
-//    ClinicianDashBoardDTO(Clinician clinician)
 }

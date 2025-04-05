@@ -1,10 +1,11 @@
-package com.onemedic.services;
+package com.onemedic.services.impl;
 
 import com.onemedic.models.Appointment;
 import com.onemedic.models.Clinician;
 import com.onemedic.models.MedicalRecord;
 import com.onemedic.models.Patient;
 import com.onemedic.repositories.*;
+import com.onemedic.services.ClinicianService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class ClinicianServiceImpl implements ClinicianService {
     public ClinicianServiceImpl(ClinicianRepository clinicianRepository,
                                 PatientRepository patientRepository,
                                 MedicalRecordRepository medicalRecordRepository,
-                                AppointmentRepository appointmentRepository, MedicalNoteRepository medicalNoteRepository) {
+                                AppointmentRepository appointmentRepository,
+                                MedicalNoteRepository medicalNoteRepository) {
         this.clinicianRepository = clinicianRepository;
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
@@ -43,7 +45,7 @@ public class ClinicianServiceImpl implements ClinicianService {
 
     @Override
     public Page<Appointment> getAllMyAppointmentsByClinicianId(Pageable pageable, String clinicianId) {
-        return appointmentRepository.findAllByClinicianId(clinicianId);
+        return appointmentRepository.findAllByClinicianId(pageable, clinicianId);
     }
 
     @Override
