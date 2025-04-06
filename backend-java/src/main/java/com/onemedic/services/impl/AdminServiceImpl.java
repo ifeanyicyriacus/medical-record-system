@@ -1,6 +1,6 @@
 package com.onemedic.services.impl;
 
-import com.onemedic.models.Admin;
+import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Clinician;
 import com.onemedic.repositories.AdminRepository;
 import com.onemedic.repositories.ClinicianRepository;
@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminServiceImpl implements AdminService {
     private final ClinicianRepository clinicianRepository;
-    private final AdminRepository adminRepository;
 
     public AdminServiceImpl(ClinicianRepository clinicianRepository, AdminRepository adminRepository) {
         this.clinicianRepository = clinicianRepository;
-        this.adminRepository = adminRepository;
     }
 
     @Override
@@ -31,31 +29,25 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Clinician getClinicianById(String id) {
-        return clinicianRepository.findById(id).orElse(null);
+        return clinicianRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Clinician"));
     }
 
     @Override
-    public Clinician getByEmail(String email) {
-        return clinicianRepository.findByEmail(email).orElse(null);
+    public Clinician getClinicianByEmail(String email) {
+        return clinicianRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Clinician"));
     }
 
     @Override
-    public Clinician updateClinician(Clinician clinician) {
+    public Clinician updateClinician(String id, Clinician clinicianDetails) {
+        Clinician clinician = getClinicianById(id);
+        clinician.setLicenseNumber(clinicianDetails.getLicenseNumber());
+        clinician.setSpecialization(clinicianDetails.getSpecialization());
+        clinician.setDate0fBirth(clinicianDetails.getDate0fBirth());
+        clinician.setEmail(clinicianDetails.getEmail());
+        clinician.setFirstName(clinicianDetails.getFirstName());
+        clinician.setLastName(clinicianDetails.getLastName());
+        clinician.setGender(clinicianDetails.getGender());
+        clinician.setPhoneNumber(clinicianDetails.getPhoneNumber());
         return clinicianRepository.save(clinician);
-    }
-
-    @Override
-    public Admin updateAdmin(Admin admin) {
-        return adminRepository.save(admin);
-    }
-
-    @Override
-    public Admin getAdminByEmail(String email) {
-        return adminRepository.findByEmail(email).orElse(null);
-    }
-
-    @Override
-    public Admin getAdminById(String id) {
-        return adminRepository.findById(id).orElse(null);
     }
 }
