@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "clinicians")
 public class Clinician extends User {
 
-    @Id
-    private String         id;
+//    @Id
+//    private String         id;
     private String         licenseNumber;
     private Specialization specialization;
 }

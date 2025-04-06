@@ -9,7 +9,9 @@ import com.onemedic.repositories.AdminRepository;
 import com.onemedic.repositories.ClinicianRepository;
 import com.onemedic.repositories.PatientRepository;
 import com.onemedic.services.AuthenticationService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AdminRepository adminRepository;
     private final ClinicianRepository clinicianRepository;
@@ -27,16 +29,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User login(String email, String password, String userType) {
         return switch (userType) {
-            case "admin" -> loginAdmin(email, password);
-            case "clinician" -> loginClinician(email, password);
-            case "patient" -> loginPatient(email, password);
+            case "SUPER_ADMIN", "ADMIN" -> loginAdmin(email, password);
+            case "CLINICIAN" -> loginClinician(email, password);
+            case "PATIENT" -> loginPatient(email, password);
             default -> throw new IllegalStateException("Unexpected value: " + userType);
         };
     }
 
     @Override
-    public void changePassword(String email, String userType, String password, String newPassword) {
+    public boolean changePassword(String email, String userType, String password, String newPassword) {
 
+        return false;
     }
 
     private Admin loginAdmin(String email, String password) {

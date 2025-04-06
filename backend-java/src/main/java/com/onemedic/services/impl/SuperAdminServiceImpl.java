@@ -3,6 +3,7 @@ package com.onemedic.services.impl;
 import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Admin;
 import com.onemedic.models.Gender;
+import com.onemedic.models.UserType;
 import com.onemedic.repositories.AdminRepository;
 import com.onemedic.services.SuperAdminService;
 import org.springframework.data.domain.Page;
@@ -25,12 +26,12 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     @Transactional
-    public void createSuperAdminIfNotExist(String email, String rawPassword, String role) {
+    public void createSuperAdminIfNotExist(String email, String rawPassword) {
         if (!adminRepository.existsByEmail(email)) {
             Admin admin = new Admin();
             admin.setEmail(email);
             admin.setPassword(passwordEncoder.encode(rawPassword));
-            admin.setRole(role);
+            admin.setType(UserType.SUPER_ADMIN);
             admin.setFirstName("SuperAdmin");
             admin.setLastName("Admin");
             admin.setPhoneNumber("+2348000000001");

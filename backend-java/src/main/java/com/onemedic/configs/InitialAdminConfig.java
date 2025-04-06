@@ -1,5 +1,6 @@
 package com.onemedic.configs;
 
+import com.onemedic.models.UserType;
 import com.onemedic.services.SuperAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,12 +19,8 @@ public class InitialAdminConfig {
     @Value("${super-admin.password}")
     private String superAdminPassword;
 
-    private final String role = "SUPER_ADMIN";
-
-
-
     @Bean
     public CommandLineRunner createInitialAdmin() {
-        return _ -> superAdminService.createSuperAdminIfNotExist(superAdminEmail, superAdminPassword, role);
+        return _ -> superAdminService.createSuperAdminIfNotExist(superAdminEmail, superAdminPassword);
     }
 }

@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "patients")
 public class Patient extends User {
 
-    @Id
-    private String id;
+//    @Id
+//    private String id;
     private final MedicalRecord medicalRecord;
 }
 
