@@ -26,6 +26,11 @@ public class SuperAdminController {
         return superAdminService.getAdminById(id);
     }
 
+    @GetMapping("/{email}")
+    public Admin getAdminByEmail(@PathVariable String email) {
+        return superAdminService.getAdminByEmail(email);
+    }
+
     @PostMapping
     public Admin createAdmin(@RequestBody Admin admin) {
         return superAdminService.createAdmin(admin);
