@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/clinicians")
+@RequestMapping("/api/admin/{id}/clinicians")
 public class AdminController {
     private final AdminService adminService;
 
@@ -22,23 +22,23 @@ public class AdminController {
     }
 
     @GetMapping
-    public Page<Clinician> getAllClinicians(Pageable pageable) {
+    public Page<Clinician> getAllClinicians(Pageable pageable, @PathVariable String id) {
         return adminService.getAllClinicians(pageable);
     }
 
-    @GetMapping("/{id}")
-    public Clinician getClinicianById(@PathVariable String id) {
-        return adminService.getClinicianById(id);
+    @GetMapping("/{clinicianId}")
+    public Clinician getClinicianById(@PathVariable String id, @PathVariable String clinicianId) {
+        return adminService.getClinicianById(clinicianId);
     }
 
     @GetMapping("/{email}")
-    public Clinician getClinicianByEmail(@PathVariable String email) {
+    public Clinician getClinicianByEmail(@PathVariable String email, @PathVariable String id) {
         return adminService.getClinicianByEmail(email);
     }
 
-    @PutMapping("/{id}")
-    public Clinician updateClinician(@PathVariable String id,
+    @PutMapping("/{clinicianId}")
+    public Clinician updateClinician(@PathVariable String id, @PathVariable String clinicianId,
                                      @RequestBody Clinician clinicianDetails) {
-        return adminService.updateClinician(id, clinicianDetails);
+        return adminService.updateClinician(clinicianId, clinicianDetails);
     }
 }

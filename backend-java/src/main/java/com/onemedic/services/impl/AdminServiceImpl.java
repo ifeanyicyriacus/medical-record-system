@@ -41,12 +41,7 @@ public class AdminServiceImpl implements AdminService {
         Clinician clinician = getClinicianById(id);
         clinician.setLicenseNumber(clinicianDetails.getLicenseNumber());
         clinician.setSpecialization(clinicianDetails.getSpecialization());
-        clinician.setDate0fBirth(clinicianDetails.getDate0fBirth());
-        clinician.setEmail(clinicianDetails.getEmail());
-        clinician.setFirstName(clinicianDetails.getFirstName());
-        clinician.setLastName(clinicianDetails.getLastName());
-        clinician.setGender(clinicianDetails.getGender());
-        clinician.setPhoneNumber(clinicianDetails.getPhoneNumber());
+        Updater.updateUser(clinician, clinicianDetails);
         return clinicianRepository.save(clinician);
     }
 }
