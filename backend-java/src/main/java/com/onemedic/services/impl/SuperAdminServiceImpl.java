@@ -72,8 +72,4 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         return adminRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Admin"));
     }
 
-    @Override
-    public void deleteById(String id) {
-//        mark as inactive
-    }
 }

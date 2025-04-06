@@ -2,7 +2,6 @@ package com.onemedic.services.impl;
 
 import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Clinician;
-import com.onemedic.repositories.AdminRepository;
 import com.onemedic.repositories.ClinicianRepository;
 import com.onemedic.services.AdminService;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
     private final ClinicianRepository clinicianRepository;
 
-    public AdminServiceImpl(ClinicianRepository clinicianRepository, AdminRepository adminRepository) {
+    public AdminServiceImpl(ClinicianRepository clinicianRepository) {
         this.clinicianRepository = clinicianRepository;
     }
 

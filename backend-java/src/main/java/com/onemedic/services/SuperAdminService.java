@@ -12,5 +12,6 @@ public interface SuperAdminService {
     Admin updateAdmin(String id, Admin admin);
     Admin getAdminByEmail(String email);
     Admin getAdminById(String id);
-    void deleteById(String id);
+//    void deactivateById(String id);
+//    void reactivateById(String id);
 }

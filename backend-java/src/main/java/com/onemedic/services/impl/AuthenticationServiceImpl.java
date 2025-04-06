@@ -34,6 +34,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         };
     }
 
+    @Override
+    public void changePassword(String email, String userType, String password, String newPassword) {
+
+    }
+
     private Admin loginAdmin(String email, String password) {
         Admin admin = adminRepository.findByEmail(email).orElse(null);
         if (admin == null || !admin.getPassword().equals(password))

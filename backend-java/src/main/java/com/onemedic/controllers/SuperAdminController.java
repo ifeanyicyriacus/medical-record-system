@@ -41,8 +41,4 @@ public class SuperAdminController {
         return superAdminService.updateAdmin(id, adminDetails);
     }
 
-    @DeleteMapping("{id}")
-    public void deleteAdmin(@PathVariable String id) {
-        superAdminService.deleteById(id);
-    }
 }
