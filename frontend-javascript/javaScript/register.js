@@ -243,6 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const lgaSelect = document.getElementById('lga');
     const roleSelect = document.getElementById("role")
     const errorMessage = document.getElementById("error-message");
+    const password = document.getElementById("password")
+    const confirmPassword = document.getElementById("confirmPassword")
 
 
     stateSelect.addEventListener('change', function() {
@@ -305,16 +307,48 @@ document.addEventListener('DOMContentLoaded', function() {
         const nigeriaPhoneRegex = /^(?:(?:(?:\+?234|0)[ -]?)(?:(?:70|80|81|90|91)[ -]?\d{8}|(?:701|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|910|911|912|913|914|915|916|917|918|919)[ -]?\d{7})|(?:0[7-9][01][0-9][ -]?\d{6}))$/;
         if(!(phoneNumber.match(nigeriaPhoneRegex))){
             errorMessage.textContent = "⚠️ Invalid Number"
+            return
         }
+
+        if (password.value !== confirmPassword.value) {
+            errorMessage.textContent = "⚠️ Passwords don't match!";
+            return;
+        }
+
+
         const formData = {
             firstName: document.getElementById('firstname').value.trim(),
             lastName: document.getElementById("lastname").value.trim(),
             phoneNumber: document.getElementById("phone").value,
             gender: document.getElementById("gender").value,
-
-
+            dob: document.getElementById("dob").value,
+            state: stateSelect.value,
+            role: roleSelect.value,
+            password: document.getElementById("password").value
         }
 
+        switch (roleSelect.value){
+            case "Doctor":
+            formData.license = document.getElementById("license").value
+            formData.specialization = document.getElementById("specialization").value
+        }
+
+        const endpoint = roleSelect.value === "Doctor" ? "/api/register/doctor" : "/api/register/patient";
+
+        try {
+            const response = await fetch(`http://localhost:8080${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            console.log("Registration successful:", result);
+            alert("Registration successful!");
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Registration failed!");
+        }
     })
 
 });
