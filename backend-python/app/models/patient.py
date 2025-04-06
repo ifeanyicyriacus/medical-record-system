@@ -1,9 +1,8 @@
-from mongoengine import ReferenceField, ListField
+from dataclasses import dataclass, field
+from typing import List
 from .user import User
-from .appointment import Appointment
 
+@dataclass
 class Patient(User):
-    meta = {'collection': 'patients'}
-    
-    patient_id = StringField(required=True, unique=True)
-    appointments = ListField(ReferenceField(Appointment))
+    patient_id: int
+    appointments: List[int] = field(default_factory=list)

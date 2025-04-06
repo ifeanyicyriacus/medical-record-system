@@ -1,11 +1,10 @@
-from mongoengine import ReferenceField, ListField, EnumField
-from .user import User
-from .specialization import Specialization
-from .appointment import Appointment
+from dataclasses import dataclass, field
+from typing import List
+from user import User
+from enums import Specialization
 
+@dataclass
 class Doctor(User):
-    meta = {'collection': 'doctors'}
-    
-    doctor_id = StringField(required=True, unique=True)
-    specialization = EnumField(Specialization, required=True)
-    appointments = ListField(ReferenceField(Appointment))
+    doctor_id: int
+    specialization: Specialization
+    appointments: List[int] = field(default_factory=list)
