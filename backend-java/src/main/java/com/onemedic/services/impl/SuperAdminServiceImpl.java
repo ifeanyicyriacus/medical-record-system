@@ -53,12 +53,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     @Override
     public Admin updateAdmin(String id, Admin adminDetails) {
         Admin admin = getAdminById(id);
-        admin.setEmail(adminDetails.getEmail());
-        admin.setFirstName(adminDetails.getFirstName());
-        admin.setLastName(adminDetails.getLastName());
-        admin.setGender(adminDetails.getGender());
-        admin.setDate0fBirth(adminDetails.getDate0fBirth());
-        admin.setPhoneNumber(adminDetails.getPhoneNumber());
+        Updater.updateUser(admin, adminDetails);
         return adminRepository.save(admin);
     }
 

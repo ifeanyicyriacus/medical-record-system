@@ -1,7 +1,8 @@
 package com.onemedic.services.impl;
 
+import com.onemedic.exceptions.AppointmentNotFoundException;
+import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Appointment;
-import com.onemedic.models.Clinician;
 import com.onemedic.models.MedicalRecord;
 import com.onemedic.models.Patient;
 import com.onemedic.repositories.*;
@@ -10,42 +11,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class ClinicianServiceImpl implements ClinicianService {
-    private final ClinicianRepository clinicianRepository;
     private final PatientRepository       patientRepository;
     private final AppointmentRepository   appointmentRepository;
     private final MedicalRecordRepository medicalRecordRepository;
     private final MedicalNoteRepository   medicalNoteRepository;
 
-    public ClinicianServiceImpl(ClinicianRepository clinicianRepository,
-                                PatientRepository patientRepository,
+    public ClinicianServiceImpl(PatientRepository patientRepository,
                                 MedicalRecordRepository medicalRecordRepository,
                                 AppointmentRepository appointmentRepository,
                                 MedicalNoteRepository medicalNoteRepository) {
-        this.clinicianRepository = clinicianRepository;
         this.patientRepository = patientRepository;
         this.medicalRecordRepository = medicalRecordRepository;
         this.appointmentRepository = appointmentRepository;
         this.medicalNoteRepository = medicalNoteRepository;
-    }
-
-
-    @Override
-    public Appointment createAppointment(Appointment appointment) {
-        return appointmentRepository.save(appointment);
-    }
-
-    @Override
-    public Appointment updateAppointment(Appointment appointment) {
-        return appointmentRepository.save(appointment);
-    }
-
-    @Override
-    public Page<Appointment> getAllMyAppointmentsByClinicianId(Pageable pageable, String clinicianId) {
-        return appointmentRepository.findAllByClinicianId(pageable, clinicianId);
     }
 
     @Override
@@ -54,28 +34,64 @@ public class ClinicianServiceImpl implements ClinicianService {
     }
 
     @Override
+    public Page<Patient> getAllPatients(Pageable pageable) {
+        return patientRepository.findAll(pageable);
+    }
+
+    @Override
+    public Patient updatePatient(String id, Patient patientDetails) {
+        Patient patient = getPatientById(id);
+        Updater.updateUser(patient, patientDetails);
+        return patientRepository.save(patient);
+    }
+
+    @Override
     public Patient getPatientById(String id) {
-        return patientRepository.findById(id).orElse(null);
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Patient"));
     }
 
     @Override
     public Patient getPatientByEmail(String email) {
-        return patientRepository.findByEmail(email).orElse(null);
+        return patientRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Patient"));
+    }
+
+    @Override
+    public Appointment createAppointment(Appointment appointment) {
+        return appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public Appointment getAppointmentById(String id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(AppointmentNotFoundException::new);
+    }
+
+    @Override
+    public Appointment updateAppointment(String id, Appointment appointmentDetails) {
+        Appointment appointment = getAppointmentById(id);
+        Updater.updateAppointment(appointment, appointmentDetails);
+        return appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public Page<Appointment> getAllAppointments(Pageable pageable) {
+        return appointmentRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Appointment> getAllMyAppointmentsByClinicianId(String clinicianId, Pageable pageable) {
+        return appointmentRepository.findAllByClinicianId(clinicianId, pageable);
     }
 
     @Override
     public MedicalRecord getPatientMedicalRecord(String patientId) {
-        Optional<Patient> patient = patientRepository.findById(patientId);
-        return patient.map(Patient::getMedicalRecord).orElse(null);
+        return getPatientById(patientId).getMedicalRecord();
     }
 
     @Override
-    public Clinician updateClinician(Clinician clinician) {
-        return clinicianRepository.save(clinician);
-    }
-
-    @Override
-    public MedicalRecord.MedicalNote addMedicalNoteToRecord(MedicalRecord.MedicalNote medicalNote, String patientId){
+    public MedicalRecord.MedicalNote addMedicalNoteToRecord(String patientId, MedicalRecord.MedicalNote medicalNote){
         MedicalRecord.MedicalNote newMedicalNote = medicalNoteRepository.save(medicalNote);
         MedicalRecord medicalRecord = getPatientMedicalRecord(patientId);
         medicalRecord.getMedicalNotes().add(newMedicalNote);

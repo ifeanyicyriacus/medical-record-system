@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admins")
+@RequestMapping("/api/admins/{id}")
 public class SuperAdminController {
     private final SuperAdminService superAdminService;
 
@@ -17,17 +17,17 @@ public class SuperAdminController {
     }
 
     @GetMapping
-    public Page<Admin> getAllAdmins(Pageable pageable) {
+    public Page<Admin> getAllAdmins(Pageable pageable, @PathVariable String id) {
         return this.superAdminService.getAllAdmins(pageable);
     }
 
-    @GetMapping("/{id}")
-    public Admin getAdmin(@PathVariable String id) {
-        return superAdminService.getAdminById(id);
+    @GetMapping("/{adminId}")
+    public Admin getAdmin(@PathVariable String id, @PathVariable String adminId) {
+        return superAdminService.getAdminById(adminId);
     }
 
     @GetMapping("/{email}")
-    public Admin getAdminByEmail(@PathVariable String email) {
+    public Admin getAdminByEmail(@PathVariable String email, @PathVariable String id) {
         return superAdminService.getAdminByEmail(email);
     }
 
@@ -36,9 +36,10 @@ public class SuperAdminController {
         return superAdminService.createAdmin(admin);
     }
 
-    @PutMapping("/{id}")
-    public Admin updateAdmin(@PathVariable String id, @RequestBody Admin adminDetails) {
-        return superAdminService.updateAdmin(id, adminDetails);
+    @PutMapping("/{adminId}")
+    public Admin updateAdmin(@PathVariable String id, @PathVariable String adminId,
+                             @RequestBody Admin adminDetails) {
+        return superAdminService.updateAdmin(adminId, adminDetails);
     }
-
+//    Start Mapping Logs Here (Log has Only get request)
 }
