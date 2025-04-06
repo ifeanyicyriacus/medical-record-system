@@ -8,5 +8,9 @@ import org.springframework.data.domain.Pageable;
 public interface SuperAdminService {
     void createSuperAdminIfNotExist(String email, String password, String role);
     Admin createAdmin(Admin admin);
-    Page<Admin> getAdmins(Pageable pageable);
+    Page<Admin> getAllAdmins(Pageable pageable);
+    Admin updateAdmin(String id, Admin admin);
+    Admin getAdminByEmail(String email);
+    Admin getAdminById(String id);
+    void deleteById(String id);
 }

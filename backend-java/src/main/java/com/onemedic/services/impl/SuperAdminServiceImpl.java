@@ -1,9 +1,9 @@
 package com.onemedic.services.impl;
 
+import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Admin;
 import com.onemedic.models.Gender;
 import com.onemedic.repositories.AdminRepository;
-import com.onemedic.repositories.ClinicianRepository;
 import com.onemedic.services.SuperAdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,12 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 @Service
-public class SuperAdminServiceImpl extends AdminServiceImpl implements SuperAdminService {
+public class SuperAdminServiceImpl implements SuperAdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SuperAdminServiceImpl(ClinicianRepository clinicianRepository, AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
-        super(clinicianRepository, adminRepository);
+    public SuperAdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -47,7 +46,34 @@ public class SuperAdminServiceImpl extends AdminServiceImpl implements SuperAdmi
     }
 
     @Override
-    public Page<Admin> getAdmins(Pageable pageable) {
+    public Page<Admin> getAllAdmins(Pageable pageable) {
         return adminRepository.findAll(pageable);
+    }
+
+    @Override
+    public Admin updateAdmin(String id, Admin adminDetails) {
+        Admin admin = getAdminById(id);
+        admin.setEmail(adminDetails.getEmail());
+        admin.setFirstName(adminDetails.getFirstName());
+        admin.setLastName(adminDetails.getLastName());
+        admin.setGender(adminDetails.getGender());
+        admin.setDate0fBirth(adminDetails.getDate0fBirth());
+        admin.setPhoneNumber(adminDetails.getPhoneNumber());
+        return adminRepository.save(admin);
+    }
+
+    @Override
+    public Admin getAdminByEmail(String email) {
+        return adminRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Admin"));
+    }
+
+    @Override
+    public Admin getAdminById(String id) {
+        return adminRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Admin"));
+    }
+
+    @Override
+    public void deleteById(String id) {
+//        mark as inactive
     }
 }
