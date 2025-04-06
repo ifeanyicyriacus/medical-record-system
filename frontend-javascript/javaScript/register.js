@@ -300,21 +300,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         errorMessage.textContent = "";
 
-        const firstName = document.getElementById("firstname").value
-        const lastName = document.getElementById("lastname").value
-        const email = document.getElementById("email").value
+
         const phoneNumber = document.getElementById("phone").value
         const nigeriaPhoneRegex = /^(?:(?:(?:\+?234|0)[ -]?)(?:(?:70|80|81|90|91)[ -]?\d{8}|(?:701|802|803|804|805|806|807|808|809|810|811|812|813|814|815|816|817|818|819|901|902|903|904|905|906|907|908|909|910|911|912|913|914|915|916|917|918|919)[ -]?\d{7})|(?:0[7-9][01][0-9][ -]?\d{6}))$/;
         if(!(phoneNumber.match(nigeriaPhoneRegex))){
             errorMessage.textContent = "⚠️ Invalid Number"
         }
+        const formData = {
+            firstName: document.getElementById('firstname').value.trim(),
+            lastName: document.getElementById("lastname").value.trim(),
+            phoneNumber: document.getElementById("phone").value,
+            gender: document.getElementById("gender").value,
 
-        const gender = document.getElementById("gender").value
-        const dob = document.getElementById("dob").value
-        const state = stateSelect.value
-        const lga = lgaSelect.value
 
-        const role = roleSelect.value
+        }
 
     })
 

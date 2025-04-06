@@ -23,7 +23,24 @@ body {
     font-size: 10px;
     color: #4D5C83;
 }
+.log-in {
+    display: flex;
+    color: white;
+    padding-left: 500px;
+    font-size: 15px;
+}
 
+.log-in-text a{
+    text-decoration: None;
+    color: blue;
+}
+
+.about-us{
+
+    border: 1px solid Black;
+
+
+}
 .navLinks {
     align-items: center;
     justify-content: space-between;
