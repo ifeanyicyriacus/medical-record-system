@@ -20,9 +20,6 @@ public class SuperAdminTest {
     private AdminRepository adminRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-//    @Autowired
-//    private SuperAdminServiceImpl adminService;
-
 
     @Test
     void thatSystemCreatesSuperAdminOnStartup() {
@@ -31,16 +28,5 @@ public class SuperAdminTest {
         assertEquals("SUPER_ADMIN", admin.get().getRole());
         assertTrue(passwordEncoder.matches("testStrongPassword123!", admin.get().getPassword()));
     }
-
-
-//    @Test
-//    void thatSuperAdminCanLogin() {
-//        String correctEmail = "testadmin@example.com";
-//        String correctPassword = passwordEncoder.encode("testStrongPassword123!");
-//        Admin admin = adminService.login(correctEmail, correctPassword);
-//        assertNotNull(admin);
-//    }
-
-
 
 }

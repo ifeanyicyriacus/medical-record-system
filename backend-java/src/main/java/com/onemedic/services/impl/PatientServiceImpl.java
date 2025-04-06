@@ -1,6 +1,8 @@
 package com.onemedic.services.impl;
 
 
+import com.onemedic.exceptions.AppointmentNotFoundException;
+import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Appointment;
 import com.onemedic.models.MedicalRecord;
 import com.onemedic.models.Patient;
@@ -23,11 +25,6 @@ public class PatientServiceImpl implements PatientService {
         this.patientRepository = patientRepository;
         this.appointmentRepository = appointmentRepository;
     }
-    
-    @Override
-    public Patient updatePatient(Patient patient) {
-        return patientRepository.save(patient);
-    }
 
     @Override
     public Appointment createAppointment(Appointment appointment) {
@@ -35,19 +32,27 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Appointment updateAppointment(Appointment appointment) {
+    public Appointment updateAppointment(String id, Appointment appointmentDetails) {
+        Appointment appointment = getAppointmentById(id);
+        Updater.updateAppointment(appointment, appointmentDetails);
         return appointmentRepository.save(appointment);
     }
 
-    @Override
-    public Page<Appointment> getAllAppointmentsByPatientId(Pageable pageable, String patientId) {
-        return appointmentRepository.findAllByPatientId(pageable, patientId);
+    private Appointment getAppointmentById(String id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(AppointmentNotFoundException::new);
     }
 
     @Override
-    public MedicalRecord getPatientMedicalRecord(String patientId) {
+    public Page<Appointment> getAllAppointmentsByPatientId(String patientId, Pageable pageable) {
+        return appointmentRepository.findAllByPatientId(patientId, pageable);
+    }
+
+    @Override
+    public MedicalRecord getMedicalRecord(String patientId) {
         Optional<Patient> patient = patientRepository.findById(patientId);
-        return patient.map(Patient::getMedicalRecord).orElse(null);
+        return patient.map(Patient::getMedicalRecord)
+                .orElseThrow(() -> new UserNotFoundException("Patient"));
     }
 
 }
