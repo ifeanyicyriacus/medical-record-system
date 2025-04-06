@@ -19,3 +19,8 @@ class AppointmentStatus(Enum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
     RESCHEDULED = "rescheduled"
+
+class UserRole(Enum):
+    ADMIN = "admin"
+    PATIENT = "patient"
+    DOCTOR = "doctor"
