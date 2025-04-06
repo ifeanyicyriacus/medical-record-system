@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from enums import Gender
+from enums import Gender, UserRole
 import bcrypt
 
 @dataclass
@@ -12,7 +12,7 @@ class User:
     email_address: str
     dob: datetime
     gender: Gender
-    role: str = "user"
+    role: UserRole
 
     def set_password(self, password: str):
         self.hash_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
