@@ -1,6 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("myForm");
     const errorMessage = document.getElementById("error-message");
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+
+    togglePassword.addEventListener("click", function () {
+        const currentType = passwordInput.getAttribute("type");
+
+        if (currentType === "password") {
+            passwordInput.setAttribute("type", "text");
+            togglePassword.textContent = "🙈";
+        } else {
+            passwordInput.setAttribute("type", "password");
+            togglePassword.textContent = "👁️";
+        }
+    });
 
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -16,13 +31,22 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         const formData = {
             name: name,
             email: email
         };
+        const roleSelect = document.getElementById("role")
 
+        const endpointMap = {
+            Doctor: "/api/register/doctor",
+            Admin: "/api/register/admin",
+            Patient: "/api/register/patient"
+        };
+
+        const endpoint = endpointMap[roleSelect.value]
         try {
-            const response = await fetch("http://localhost:5000/login", {
+            const response = await fetch(`http://localhost:8080${endpoint}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
