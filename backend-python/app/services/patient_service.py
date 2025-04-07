@@ -1,51 +1,51 @@
 from typing import List, Optional
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.patient import Patient
 from app.models.appointment import Appointment
-from app.repositories.patient_repository import PatientRepository
-from .interfaces.patient_service import IPatientService
+from models.user import User
+from repositories.appointment_repository import AppointmentRepository
+from repositories.patient_repository import PatientRepository
+from repositories.user_repository import UserRepository
+from user_service import UserService
 
-class PatientService(IPatientService):
-    def __init__(self, patient_repository: PatientRepository):
-        self.patient_repository = patient_repository
-    
-    def register(self, patient_data: dict) -> Optional[Patient]:
-        try:
-            # Hash the password
-            patient_data['hash_password'] = generate_password_hash(patient_data.pop('password'))
-            
-            # Create and save patient
-            patient = Patient(**patient_data)
-            patient.save()
-            return patient
-        except Exception as e:
-            return None
-    
-    def login(self, email: str, password: str) -> Optional[dict]:
-        try:
-            patient = Patient.objects.get(email_address=email)
-            if check_password_hash(patient.hash_password, password):
-                return {
-                    "id": str(patient.id),
-                    "patient_id": patient.patient_id,
-                    "name": f"{patient.first_name} {patient.last_name}",
-                    "email": patient.email_address
-                }
-            return None
-        except Exception as e:
-            return None
-    
-    def create_appointment(self, patient_id: str, doctor_id: str, date: datetime) -> bool:
-        appointment_data = {
-            "patient_id": patient_id,
-            "doctor_id": doctor_id,
-            "date": date
+
+class PatientService(UserService):
+    def __init__(self, user_repository: UserRepository, appointment_repository: AppointmentRepository):
+        super().__init__(user_repository)
+        self.appointment_repository = appointment_repository
+
+    def create_patient(self, data: dict) -> dict:
+        return self.create_user(data)
+
+    def update_patient(self, patient: User) -> None:
+        self.update_user(patient)
+
+    def delete_patient(self, patient_id: str) -> None:
+        self.delete_user(patient_id)
+
+    def get_patient_history(self, patient_id: str) -> dict:
+
+        pass
+
+    def book_appointment(self, appointment: Appointment) -> Appointment:
+        return self.appointment_repository.create_appointment(appointment)
+
+    def reschedule_appointment(self, appointment_id: str, date: str) -> None:
+        self.appointment_repository.reschedule_appointment(appointment_id, date)
+
+    def view_appointments(self, patient_id: str) -> List[Appointment]:
+        return self.appointment_repository.get_appointments_by_patient(patient_id)
+
+    def update_student_notes(self, appointment_id: str, notes: str) -> None:
+        self.appointment_repository.update_patient_notes(appointment_id, notes)
+
+
+    def get_appointments_report(self, start_date: datetime, end_date: datetime) -> Dict:
+        appointments = self.appointment_repository.get_by_date_range(start_date, end_date)
+        return {
+            'total_appointments': len(appointments),
+            'scheduled': len([a for a in appointments if a.status == 'scheduled']),
+            'completed': len([a for a in appointments if a.status == 'completed']),
+            'cancelled': len([a for a in appointments if a.status == 'cancelled']),
+            'appointments': appointments
         }
-        return self.patient_repository.create_appointment(patient_id, appointment_data)
-    
-    def reschedule_appointment(self, patient_id: str, appointment_id: str, new_date: datetime) -> bool:
-        return self.patient_repository.reschedule_appointment(appointment_id, new_date.isoformat())
-    
-    def view_appointments(self, patient_id: str) -> List[dict]:
-        return self.patient_repository.view_appointments()
