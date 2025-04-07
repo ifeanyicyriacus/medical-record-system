@@ -42,3 +42,9 @@ class EmailAlreadyExistsException(MedicalRecordSystemException):
     def __init__(self, email):
         self.message = f"Email {email} already exists."
         super().__init__(self.message)
+
+
+class UserNotFoundException:
+    def __init__(self, email):
+        self.message = "User not found"
+        super().__init__(self.message)
