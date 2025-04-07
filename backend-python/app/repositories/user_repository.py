@@ -2,8 +2,11 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
+from exceptions import ValidationError, DatabaseError, IncorrectLoginCredentialsException, EmailAlreadyExistsException
+from models.user import User
 
 load_dotenv()
+
 
 class UserRepository:
     def __init__(self):
@@ -12,8 +15,16 @@ class UserRepository:
         self.collection = self.db[os.getenv('USERS_COLLECTION')]
 
     def create_user(self, data):
-        result = self.collection.insert_one(data)
-        return str(result.inserted_id)
+        if self.get_user_by_email(data['email_address']):
+            raise EmailAlreadyExistsException(data['email_address'])
+
+        user = User(**data)
+        user.set_password(data['password'])  # Hash the password
+
+        result = self.collection.insert_one(user.__dict__)
+        inserted_document = self.collection.find_one({"_id": result.inserted_id})
+
+        return inserted_document
 
     def get_user_by_id(self, user_id):
         return self.collection.find_one({'_id': ObjectId(user_id)})
@@ -29,3 +40,14 @@ class UserRepository:
 
     def get_users_by_role(self, role):
         return list(self.collection.find({'role': role}))
+
+    def login_user(self, email, password):
+        user_data = self.get_user_by_email(email)
+        if not user_data:
+            raise IncorrectLoginCredentialsException()
+
+        user = User(**user_data)
+        if not user.check_password(password):
+            raise IncorrectLoginCredentialsException()
+
+        return user

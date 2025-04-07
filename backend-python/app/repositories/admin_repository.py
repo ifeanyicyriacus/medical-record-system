@@ -1,28 +1,32 @@
-from pymongo import MongoClient
+from repositories.user_repository import UserRepository
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
+from exceptions import UnauthorizedAccessException, EmailAlreadyExistsException
+from models.user import User
 
 load_dotenv()
 
-class AdminRepository:
+class AdminRepository(UserRepository):
     def __init__(self):
-        self.client = MongoClient(os.getenv('MONGO_URI'))
-        self.db = self.client[os.getenv('DB_NAME')]
+        super().__init__()
         self.collection = self.db[os.getenv('ADMINS_COLLECTION')]
 
     def create_admin(self, data):
-        result = self.collection.insert_one(data)
-        return str(result.inserted_id)
+        return self.create_user(data)
 
     def get_admin_by_id(self, admin_id):
-        return self.collection.find_one({'_id': ObjectId(admin_id)})
-
-    def get_all_admins(self):
-        return list(self.collection.find({}))
+        admin = self.get_user_by_id(admin_id)
+        if not admin:
+            raise UnauthorizedAccessException(f"Admin with ID {admin_id} not found.")
+        return admin
 
     def update_admin(self, admin_id, data):
+        if not self.get_admin_by_id(admin_id):
+            raise UnauthorizedAccessException(f"Admin with ID {admin_id} not found.")
         self.collection.update_one({'_id': ObjectId(admin_id)}, {'$set': data})
 
     def delete_admin(self, admin_id):
+        if not self.get_admin_by_id(admin_id):
+            raise UnauthorizedAccessException(f"Admin with ID {admin_id} not found.")
         self.collection.delete_one({'_id': ObjectId(admin_id)})

@@ -2,7 +2,8 @@ from repositories.user_repository import UserRepository
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
-from exceptions import PatientNotFoundException, ValidationError, DatabaseError
+from exceptions import PatientNotFoundException, ValidationError, DatabaseError, EmailAlreadyExistsException
+from models.user import User
 
 load_dotenv()
 
@@ -10,6 +11,9 @@ class PatientRepository(UserRepository):
     def __init__(self):
         super().__init__()
         self.collection = self.db[os.getenv('PATIENTS_COLLECTION')]
+
+    def create_patient(self, data):
+        return self.create_user(data)
 
     def get_patient_by_id(self, patient_id):
         patient = self.get_user_by_id(patient_id)
@@ -33,7 +37,7 @@ class PatientRepository(UserRepository):
     def get_patient_medical_history(self, patient_id):
         if not self.get_patient_by_id(patient_id):
             raise PatientNotFoundException(patient_id)
-        # Assuming appointments are stored in a separate collection
+
         appointments_collection = self.db[os.getenv('APPOINTMENTS_COLLECTION')]
         try:
             return list(appointments_collection.find({'patient_id': patient_id}))
