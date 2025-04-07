@@ -31,4 +31,4 @@ app.register_blueprint(appointment_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=8000, debug=True)
