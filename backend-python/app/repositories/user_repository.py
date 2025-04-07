@@ -19,7 +19,7 @@ class UserRepository:
             raise EmailAlreadyExistsException(data['email_address'])
 
         user = User(**data)
-        user.set_password(data['password'])  # Hash the password
+        user.set_password(data['password'])
 
         result = self.collection.insert_one(user.__dict__)
         inserted_document = self.collection.find_one({"_id": result.inserted_id})
