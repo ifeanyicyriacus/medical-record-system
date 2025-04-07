@@ -1,11 +1,9 @@
 package com.onemedic.dtos.requests;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-final public class ChangePasswordRequest {
+final public class ChangePasswordRequestDto {
     private String email;
     private String type;
     private String password;

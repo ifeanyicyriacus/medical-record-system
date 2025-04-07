@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admins/{id}")
+@RequestMapping("/api/sudo/{id}")
 public class SuperAdminController {
     private final SuperAdminService superAdminService;
 

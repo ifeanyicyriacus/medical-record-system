@@ -1,6 +1,11 @@
 package com.onemedic.services.impl;
 
+import com.onemedic.dtos.requests.ChangePasswordRequestDto;
+import com.onemedic.dtos.requests.LoginRequestDto;
+import com.onemedic.dtos.responses.ChangePasswordResponseDto;
+import com.onemedic.dtos.responses.LoginResponseDto;
 import com.onemedic.exceptions.IncorrectCredentialException;
+import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Admin;
 import com.onemedic.models.Clinician;
 import com.onemedic.models.Patient;
@@ -10,6 +15,7 @@ import com.onemedic.repositories.ClinicianRepository;
 import com.onemedic.repositories.PatientRepository;
 import com.onemedic.services.AuthenticationService;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -27,7 +33,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     @Override
-    public User login(String email, String password, String userType) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+        String email = loginRequestDto.getEmail();
+        String password = loginRequestDto.getPassword();
+        String userType = loginRequestDto.getType();
+
         return switch (userType) {
             case "SUPER_ADMIN", "ADMIN" -> loginAdmin(email, password);
             case "CLINICIAN" -> loginClinician(email, password);
@@ -37,32 +47,72 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public boolean changePassword(String email, String userType, String password, String newPassword) {
+    public ChangePasswordResponseDto changePassword(ChangePasswordRequestDto changePasswordRequestDto) {
 
-        return false;
+        String email = changePasswordRequestDto.getEmail();
+        String userType = changePasswordRequestDto.getType();
+        String password = changePasswordRequestDto.getPassword();
+        String newPassword = changePasswordRequestDto.getNewPassword();
+
+        User user = switch (userType) {
+            case "SUPER_ADMIN", "ADMIN" -> adminRepository.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException("Admin"));
+            case "CLINICIAN" -> clinicianRepository.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException("Clinician"));
+            case "PATIENT" -> patientRepository.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException("Patient"));
+            default -> throw new IllegalStateException("Unexpected value: " + userType);
+        };
+
+        final boolean correctPasswordConfirmation = user.getPassword().equals(password);
+        if (correctPasswordConfirmation) {
+            user.setPassword(newPassword);
+            switch (userType) {
+                case "SUPER_ADMIN", "ADMIN" -> adminRepository.save((Admin)user);
+                case "CLINICIAN" -> clinicianRepository.save((Clinician)user);
+                case "PATIENT" -> patientRepository.save((Patient)user);
+            }
+        }
+
+        ChangePasswordResponseDto changePasswordResponseDto = new ChangePasswordResponseDto();
+        changePasswordResponseDto.setSuccess(correctPasswordConfirmation);
+        changePasswordResponseDto.setMessage((correctPasswordConfirmation)
+                ? "Password changed successfully!"
+                : "Password unchanged failed!");
+
+        return changePasswordResponseDto;
     }
 
-    private Admin loginAdmin(String email, String password) {
+    private LoginResponseDto loginAdmin(String email, String password) {
         Admin admin = adminRepository.findByEmail(email).orElse(null);
         if (admin == null || !admin.getPassword().equals(password))
             throw new IncorrectCredentialException();
-        return admin;
-
+        return mapToLoginResponse(admin);
     }
 
-    private Clinician loginClinician(String email, String password) {
+    private LoginResponseDto loginClinician(String email, String password) {
         Clinician clinician = clinicianRepository.findByEmail(email).orElse(null);
         if (clinician == null || !clinician.getPassword().equals(password))
             throw new IncorrectCredentialException();
-        return clinician;
+        return mapToLoginResponse(clinician);
     }
 
-    private Patient loginPatient(String email, String password) {
+    private LoginResponseDto loginPatient(String email, String password) {
         Patient patient = patientRepository.findByEmail(email).orElse(null);
         if (patient == null || !patient.getPassword().equals(password))
             throw new IncorrectCredentialException();
-        return patient;
+        return mapToLoginResponse(patient);
     }
 
-
+    private LoginResponseDto mapToLoginResponse(User user) {
+        LoginResponseDto responseDto = new LoginResponseDto();
+        responseDto.setId(user.getId());
+        responseDto.setEmail(user.getEmail());
+        responseDto.setFirstName(user.getFirstName());
+        responseDto.setLastName(user.getLastName());
+        responseDto.setUserType(user.getType().toString());
+        responseDto.setGender(user.getGender().toString());
+        responseDto.setPhoneNumber(user.getPhoneNumber());
+        return responseDto;
+    }
 }

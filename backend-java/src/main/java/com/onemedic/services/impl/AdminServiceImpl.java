@@ -4,6 +4,7 @@ import com.onemedic.exceptions.UserNotFoundException;
 import com.onemedic.models.Clinician;
 import com.onemedic.repositories.ClinicianRepository;
 import com.onemedic.services.AdminService;
+import com.onemedic.utils.UpdateMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class AdminServiceImpl implements AdminService {
         Clinician clinician = getClinicianById(id);
         clinician.setLicenseNumber(clinicianDetails.getLicenseNumber());
         clinician.setSpecialization(clinicianDetails.getSpecialization());
-        Updater.updateUser(clinician, clinicianDetails);
+        UpdateMapper.updateUser(clinician, clinicianDetails);
         return clinicianRepository.save(clinician);
     }
 }
