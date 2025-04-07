@@ -1,8 +1,8 @@
-from repositories.user_repository import UserRepository
+from user_repository import UserRepository
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
-from exceptions import UnauthorizedAccessException, EmailAlreadyExistsException
+from exceptions.custom_exception import UnauthorizedAccessException, EmailAlreadyExistsException
 from models.user import User
 
 load_dotenv()

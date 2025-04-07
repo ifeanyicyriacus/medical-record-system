@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 import os
-from exceptions import AppointmentNotFoundException, ValidationError, DatabaseError
+from exceptions.custom_exception import AppointmentNotFoundException, ValidationError, DatabaseError
 
 load_dotenv()
 
