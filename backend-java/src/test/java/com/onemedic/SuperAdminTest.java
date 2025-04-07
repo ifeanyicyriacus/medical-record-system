@@ -25,7 +25,7 @@ public class SuperAdminTest {
     void thatSystemCreatesSuperAdminOnStartup() {
         Optional<Admin> admin = adminRepository.findByEmail("testadmin@example.com");
         assertTrue(admin.isPresent());
-        assertEquals("SUPER_ADMIN", admin.get().getRole());
+        assertEquals("SUPER_ADMIN", admin.get().getType().toString());
         assertTrue(passwordEncoder.matches("testStrongPassword123!", admin.get().getPassword()));
     }
 

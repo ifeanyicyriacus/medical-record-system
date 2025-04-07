@@ -7,6 +7,7 @@ import com.onemedic.models.MedicalRecord;
 import com.onemedic.models.Patient;
 import com.onemedic.repositories.*;
 import com.onemedic.services.ClinicianService;
+import com.onemedic.utils.UpdateMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class ClinicianServiceImpl implements ClinicianService {
     @Override
     public Patient updatePatient(String id, Patient patientDetails) {
         Patient patient = getPatientById(id);
-        Updater.updateUser(patient, patientDetails);
+        UpdateMapper.updateUser(patient, patientDetails);
         return patientRepository.save(patient);
     }
 
@@ -71,7 +72,7 @@ public class ClinicianServiceImpl implements ClinicianService {
     @Override
     public Appointment updateAppointment(String id, Appointment appointmentDetails) {
         Appointment appointment = getAppointmentById(id);
-        Updater.updateAppointment(appointment, appointmentDetails);
+        UpdateMapper.updateAppointment(appointment, appointmentDetails);
         return appointmentRepository.save(appointment);
     }
 

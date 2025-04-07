@@ -6,6 +6,8 @@ import com.onemedic.models.Gender;
 import com.onemedic.models.UserType;
 import com.onemedic.repositories.AdminRepository;
 import com.onemedic.services.SuperAdminService;
+import com.onemedic.utils.UpdateMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,14 +21,16 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SuperAdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public SuperAdminServiceImpl(AdminRepository adminRepository,
+                                 PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
-    public void createSuperAdminIfNotExist(String email, String rawPassword) {
+    public void createSuperAdminIfNotExists(String email, String rawPassword) {
         if (!adminRepository.existsByEmail(email)) {
             Admin admin = new Admin();
             admin.setEmail(email);
@@ -54,7 +58,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     @Override
     public Admin updateAdmin(String id, Admin adminDetails) {
         Admin admin = getAdminById(id);
-        Updater.updateUser(admin, adminDetails);
+        UpdateMapper.updateUser(admin, adminDetails);
         return adminRepository.save(admin);
     }
 

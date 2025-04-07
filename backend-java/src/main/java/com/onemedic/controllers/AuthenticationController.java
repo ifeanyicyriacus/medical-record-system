@@ -1,11 +1,12 @@
 package com.onemedic.controllers;
 
-import com.onemedic.dtos.requests.ChangePasswordRequest;
-import com.onemedic.dtos.requests.LoginRequest;
-import com.onemedic.dtos.responses.ChangePasswordResponse;
-import com.onemedic.dtos.responses.LoginResponse;
+import com.onemedic.dtos.requests.ChangePasswordRequestDto;
+import com.onemedic.dtos.requests.LoginRequestDto;
+import com.onemedic.dtos.responses.ChangePasswordResponseDto;
+import com.onemedic.dtos.responses.LoginResponseDto;
 import com.onemedic.services.AuthenticationService;
 import com.onemedic.services.impl.AuthenticationServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,22 +22,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
-        String userType = loginRequest.getType();
-        return new LoginResponse(authenticationService.login(email, password, userType));
+    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        return authenticationService.login(loginRequestDto);
     }
 
     @PostMapping("/change-password")
-    public ChangePasswordResponse changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-        String email = changePasswordRequest.getEmail();
-        String userType = changePasswordRequest.getType();
-        String password = changePasswordRequest.getPassword();
-        String newPassword = changePasswordRequest.getNewPassword();
-        return  new ChangePasswordResponse(
-                authenticationService.changePassword(email, userType, password, newPassword));
+    public ChangePasswordResponseDto changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
+        return authenticationService.changePassword(changePasswordRequestDto);
     }
-
 
 }

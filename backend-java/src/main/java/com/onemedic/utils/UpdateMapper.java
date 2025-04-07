@@ -1,11 +1,11 @@
-package com.onemedic.services.impl;
+package com.onemedic.utils;
 
 import com.onemedic.models.Appointment;
 import com.onemedic.models.User;
 
-public class Updater {
+public class UpdateMapper {
 
-    static void updateUser(User user, User newUserDetails) {
+    public static void updateUser(User user, User newUserDetails) {
         user.setEmail(newUserDetails.getEmail());
         user.setFirstName(newUserDetails.getFirstName());
         user.setLastName(newUserDetails.getLastName());
