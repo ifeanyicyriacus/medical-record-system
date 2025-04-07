@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 from user import User
-from enums import Specialization
+from app.models.enums import Specialization
 
 @dataclass
 class Doctor(User):

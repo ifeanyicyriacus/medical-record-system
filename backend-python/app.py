@@ -16,10 +16,10 @@ client = MongoClient(os.getenv('MONGO_URI'))
 db = client[os.getenv('DB_NAME')]
 
 # Register blueprints
-from controllers.patient_controller import patient_bp
-from controllers.doctor_controller import doctor_bp
-from controllers.appointment_controller import appointment_bp
-from controllers.admin_controller import admin_bp
+from app.controllers.patient_controller import patient_bp
+from app.controllers.doctor_controller import doctor_bp
+#from app.controllers.appointment_controller import appointment_bp
+#from app.controllers.admin_controller import admin_bp
 
 app.register_blueprint(patient_bp)
 app.register_blueprint(doctor_bp)

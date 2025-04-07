@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from models.patient import Patient
-from models.appointment import Appointment
+from app.models.patient import Patient
+from app.models.appointment import Appointment
 from bson import ObjectId
 
 patient_bp = Blueprint('patient', __name__, url_prefix='/patients')
