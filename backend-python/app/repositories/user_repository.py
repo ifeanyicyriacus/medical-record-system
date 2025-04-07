@@ -1,12 +1,7 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from dotenv import load_dotenv
-import os
-from exceptions import ValidationError, DatabaseError, IncorrectLoginCredentialsException, EmailAlreadyExistsException
 from models.user import User
-
-load_dotenv()
-
+from custom_exception import MedicalRecordSystemException
 
 class UserRepository:
     def __init__(self):
