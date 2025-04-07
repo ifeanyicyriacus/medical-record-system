@@ -1,26 +1,41 @@
-from user_repository import UserRepository
-from models.patient import Patient
-from exceptions.custom_exceptions import PatientNotFoundException
+from repositories.user_repository import UserRepository
+from bson.objectid import ObjectId
+from dotenv import load_dotenv
+import os
+from exceptions import PatientNotFoundException, ValidationError, DatabaseError
+
+load_dotenv()
 
 class PatientRepository(UserRepository):
-    def __init__(self, db):
-        super().__init__(db, 'patients')
+    def __init__(self):
+        super().__init__()
+        self.collection = self.db[os.getenv('PATIENTS_COLLECTION')]
 
-    def add_patient(self, patient: Patient):
-        self.create_user(patient)
-
-    def get_patient(self, patient_id: str) -> Patient:
-        try:
-            return self.get_user_by_id(patient_id)
-        except MedicalRecordSystemException:
+    def get_patient_by_id(self, patient_id):
+        patient = self.get_user_by_id(patient_id)
+        if not patient:
             raise PatientNotFoundException(patient_id)
+        return patient
 
-    def update_patient(self, patient_id: str, update_data: dict):
-        self.update_user(patient_id, update_data)
+    def get_all_patients(self):
+        try:
+            return self.get_users_by_role('patient')
+        except Exception as e:
+            raise DatabaseError(f"Error fetching patients: {str(e)}")
 
-    def delete_patient(self, patient_id: str):
-        self.delete_user(patient_id)
+    def update_patient_profile(self, patient_id, profile_data):
+        if not profile_data:
+            raise ValidationError("Profile data cannot be empty")
+        if not self.get_patient_by_id(patient_id):
+            raise PatientNotFoundException(patient_id)
+        self.collection.update_one({'_id': ObjectId(patient_id)}, {'$set': profile_data})
 
-    def search_patients(self, name: str):
-        data = self.collection.find({"name": {"$regex": name, "$options": "i"}})
-        return [Patient(**item) for item in data]
+    def get_patient_medical_history(self, patient_id):
+        if not self.get_patient_by_id(patient_id):
+            raise PatientNotFoundException(patient_id)
+        # Assuming appointments are stored in a separate collection
+        appointments_collection = self.db[os.getenv('APPOINTMENTS_COLLECTION')]
+        try:
+            return list(appointments_collection.find({'patient_id': patient_id}))
+        except Exception as e:
+            raise DatabaseError(f"Error fetching medical history for patient {patient_id}: {str(e)}")

@@ -1,27 +1,31 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from models.user import User
-from custom_exceptions import MedicalRecordSystemException
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 class UserRepository:
-    def __init__(self, db, collection_name):
-        self.collection = db[collection_name]
+    def __init__(self):
+        self.client = MongoClient(os.getenv('MONGO_URI'))
+        self.db = self.client[os.getenv('DB_NAME')]
+        self.collection = self.db[os.getenv('USERS_COLLECTION')]
 
-    def create_user(self, user: User):
-        self.collection.insert_one(user.__dict__)
+    def create_user(self, data):
+        result = self.collection.insert_one(data)
+        return str(result.inserted_id)
 
-    def get_user_by_id(self, user_id: str) -> User:
-        data = self.collection.find_one({"_id": ObjectId(user_id)})
-        if not data:
-            raise MedicalRecordSystemException(f"User with ID {user_id} not found.")
-        return User(**data)
+    def get_user_by_id(self, user_id):
+        return self.collection.find_one({'_id': ObjectId(user_id)})
 
-    def update_user(self, user_id: str, update_data: dict):
-        result = self.collection.update_one({"_id": ObjectId(user_id)}, {"$set": update_data})
-        if result.matched_count == 0:
-            raise MedicalRecordSystemException(f"User with ID {user_id} not found.")
+    def get_user_by_email(self, email):
+        return self.collection.find_one({'email_address': email})
 
-    def delete_user(self, user_id: str):
-        result = self.collection.delete_one({"_id": ObjectId(user_id)})
-        if result.deleted_count == 0:
-            raise MedicalRecordSystemException(f"User with ID {user_id} not found.")
+    def update_user(self, user_id, data):
+        self.collection.update_one({'_id': ObjectId(user_id)}, {'$set': data})
+
+    def delete_user(self, user_id):
+        self.collection.delete_one({'_id': ObjectId(user_id)})
+
+    def get_users_by_role(self, role):
+        return list(self.collection.find({'role': role}))
