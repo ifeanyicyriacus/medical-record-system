@@ -2,42 +2,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("myForm");
     const errorMessage = document.getElementById("error-message");
 
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-
-
-    togglePassword.addEventListener("click", function () {
-        const currentType = passwordInput.getAttribute("type");
-
-        if (currentType === "password") {
-            passwordInput.setAttribute("type", "text");
-            togglePassword.textContent = "🙈";
-        } else {
-            passwordInput.setAttribute("type", "password");
-            togglePassword.textContent = "👁️";
-        }
-    });
-
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+
         errorMessage.textContent = "";
 
-        const email = document.getElementById("email").value;
-        const password = passwordInput.value;
+        const name = document.getElementById("email").value;
+        const email = document.getElementById("password").value;
 
-        if (email === "" || password === "") {
+        if (name === "" || email === "") {
             errorMessage.textContent = "⚠️ Please fill in all fields!";
             return;
         }
 
         const formData = {
-            email: email,
-            password: password
+            name: name,
+            email: email
         };
 
         try {
-            const response = await fetch("http://localhost:8080/api/patients", {
+            const response = await fetch("http://localhost:5000/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -55,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             errorMessage.style.color = "green";
             errorMessage.textContent = "✅ Login successful!";
+
         } catch (error) {
             console.error("Error:", error);
             errorMessage.textContent = "⚠️ Failed to connect to the server.";
