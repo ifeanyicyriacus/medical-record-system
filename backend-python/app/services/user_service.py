@@ -18,8 +18,14 @@ class UserService:
         return self.user_repository.delete_user(user_id)
 
     def authenticate_user(self, email: str, password: str):
-        user = self.user_repository.get_user_by_email(email)
-        if user and user.check_password(password):
+        user_data = self.user_repository.get_user_by_email(email)
+
+        if not user_data:
+            return None
+
+        user_data.pop('_id', None)
+        user = User(**user_data)
+        if user.check_password(password):
             return user
         return None
 
