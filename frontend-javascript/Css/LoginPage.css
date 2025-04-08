@@ -134,7 +134,7 @@ button:hover {
 .logo-text {
     font-size: 18px;
     font-weight: bold;
-    color: #3A3A3A;
+    color: White;
 }
 
 .navBar ul {
@@ -148,7 +148,7 @@ button:hover {
 
 .navBar ul li a {
     text-decoration: none;
-    color: #333;
+    color: White;
     transition: color 0.3s;
 }
 

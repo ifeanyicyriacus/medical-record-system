@@ -345,15 +345,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch(`http://localhost:8080${endpoint}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
 
-            const result = await response.json();
-            console.log("Registration successful:", result);
-            alert("Registration successful!");
+            if (response.ok) {
+                window.location.href = "../Html/LoginPage.html";
+            } else {
+                errorMessage.textContent = "⚠️ Login Failed";
+                const errorData = await response.json();
+                console.error("Error details:", errorData);
+            }
         } catch (error) {
-            console.error("Error:", error);
-            alert("Registration failed!");
+            console.error("Network/request error:", error);
+            errorMessage.textContent = "⚠️ Registration Failed. Try again.";
         }
     })
 

@@ -52,7 +52,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData)
-            });
+            }).then(response =>{
+                if(response.ok){
+                    if(roleSelect.value === "Patient"){
+                        window.location.href = "../Html/PatientDashBoard.html"
+                    }else if (roleSelect.value === "Doctor"){
+                        window.location.href = "../Html/StaffDashBoard.html"
+                    }else {
+                        window.location.href = "../Html/AdminDashBoard.html"
+                    }
+                }else{
+                    errorMessage.textContent = "Login Failed!!!"
+                }
+            })
 
             const result = await response.json();
             console.log("Server Response:", result);

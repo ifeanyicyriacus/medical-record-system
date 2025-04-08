@@ -57,7 +57,7 @@ body {
 .logo-text {
     font-size: 18px;
     font-weight: bold;
-    color: #3A3A3A;
+    color: White;
 }
 
 .navBar ul {
@@ -71,7 +71,7 @@ body {
 
 .navBar ul li a {
     text-decoration: none;
-    color: #333;
+    color: White;
     transition: color 0.3s;
 }
 
@@ -104,6 +104,7 @@ body {
     font-size: 0.8rem;
     margin-bottom: 5px;
     display: none;
+    padding: 200px;
 }
 
 
@@ -157,7 +158,7 @@ button[type="submit"]:hover {
 
 #error-message {
     color: red;
-    font-size: 14px;
+    font-size: 20px;
     margin-bottom: 10px;
 }
 

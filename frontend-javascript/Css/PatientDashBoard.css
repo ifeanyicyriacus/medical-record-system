@@ -1,14 +1,12 @@
-* {
+*{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
 body {
     background-color: #5C73DA;
 }
-
 
 
 .navBar {
@@ -42,7 +40,7 @@ body {
 .logo-text {
     font-size: 18px;
     font-weight: bold;
-    color: White;
+    color: #e2e8f0;
 }
 
 .navBar ul {
@@ -59,71 +57,33 @@ body {
     color: White;
     transition: color 0.3s;
 }
-.body-two{
-    display: flex;
-
-}
-.body-text{
-    padding-left: 90px;
-    padding-top: 150px;
-    font-family: Inter, serif;
-    white-space: nowrap;
-
-}
-
-.welcome-text{
-    padding-left: 30px;
-    font-size: 64px;
-}
-
-.one-medic-text{
-    color:#002CF2;
-    font-size: 92px;
-}
-
-.medical-system-text{
-    padding-left:60px ;
-    color: #002CF2;
-    font-size: 30px;
-}
-
-
-
-.body-content{
-    position: relative;
-    display: flex;
-    img{
-        width:700px;
-        height:500px;
-        padding-left: 100px;
-        float: right;
-    }
-}
-
-.get-started-button {
-    margin: 70px;
-    padding: 12px 24px;
-    background-color: #002CF2;
-    border: none;
-    border-radius: 2px;
-}
-
-.get-started-button a{
-    color: white;
-    text-decoration: none;
-}
 
 .navBar ul li a:hover {
     color: #007BFF;
 }
 
-
 .about-us{
-    text-align: center;
-    color: white;
+
+    border: 1px solid Black;
+
+
 }
 
+
+.top-display{
+    padding: 50px 20px;
+}
+.vital-check{
+    color: #e2e8f0;
+}
+
+
+
+
 @media (max-width: 768px) {
+    .menu-icon {
+        display: block;
+    }
     .navBar {
         flex-direction: column;
         text-align: center;
@@ -135,10 +95,16 @@ body {
     .navBar ul li {
         margin: 10px 0;
     }
-    .hero h1 {
-        font-size: 28px;
+
+    .navLinks a{
+        display: block;
+        font-size: 18px;
+
     }
-    .about p {
-        font-size: 16px;
-    }
+}
+.hero h1 {
+    font-size: 28px;
+}
+.about p {
+    font-size: 16px;
 }
