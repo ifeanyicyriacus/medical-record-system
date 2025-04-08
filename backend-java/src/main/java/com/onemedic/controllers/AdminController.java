@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/{id}/clinicians")
+@RequestMapping("/api/admins/{id}/clinicians")
 public class AdminController {
     private final AdminService adminService;
 
@@ -26,12 +26,12 @@ public class AdminController {
         return adminService.getAllClinicians(pageable);
     }
 
-    @GetMapping("/{clinicianId}")
+    @GetMapping("?id={clinicianId}")
     public Clinician getClinicianById(@PathVariable String id, @PathVariable String clinicianId) {
         return adminService.getClinicianById(clinicianId);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("?email={email}")
     public Clinician getClinicianByEmail(@PathVariable String email, @PathVariable String id) {
         return adminService.getClinicianByEmail(email);
     }

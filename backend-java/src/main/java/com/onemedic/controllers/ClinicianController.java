@@ -33,15 +33,18 @@ public class ClinicianController {
         return clinicianService.updatePatient(patientId, patientDetails);
     }
 
-    @GetMapping("/patients/{patientId}")
+    @GetMapping("/patients?id={patientId}")
     public Patient getPatientById(@PathVariable String id, @PathVariable String patientId) {
         return clinicianService.getPatientById(patientId);
     }
 
-    @GetMapping("/patients/{email}")
+    @GetMapping("/patients?email={email}")
     public Patient getPatientByEmail(@PathVariable String id, @PathVariable String email) {
         return clinicianService.getPatientByEmail(email);
     }
+
+
+
 
     @PostMapping("/appointments")
     public Appointment createAppointment(@PathVariable String id, @RequestBody Appointment appointment) {
@@ -54,7 +57,7 @@ public class ClinicianController {
         return clinicianService.updateAppointment(appointmentId, appointment);
     }
 
-    @PutMapping("/appointments")
+    @GetMapping("/appointments")
     public Page<Appointment> getAllAppointments(@PathVariable String id, Pageable pageable) {
         return clinicianService.getAllAppointments(pageable);
     }
@@ -64,13 +67,15 @@ public class ClinicianController {
         return clinicianService.getAllMyAppointmentsByClinicianId(id, pageable);
     }
 
+
+
     @GetMapping("/medical-records/{patientId}")
     public MedicalRecord getPatientMedicalRecord(@PathVariable String id, @PathVariable String patientId) {
         return clinicianService.getPatientMedicalRecord(patientId);
     }
 
     @PutMapping("/medical-records/{patientId}")
-    public MedicalRecord.MedicalNote addMedicalNoteToRecord(@PathVariable String id, @PathVariable String patientId,
+    public MedicalRecord.MedicalNote addNoteToMedicalRecord(@PathVariable String id, @PathVariable String patientId,
                                                             MedicalRecord.MedicalNote medicalNote) {
         return clinicianService.addMedicalNoteToRecord(patientId, medicalNote);
     }
