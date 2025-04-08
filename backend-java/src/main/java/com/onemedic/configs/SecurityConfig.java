@@ -1,6 +1,8 @@
 package com.onemedic.configs;
 
 import com.onemedic.models.UserType;
+import com.onemedic.security.exceptions.AuthEntryPointJwt;
+import com.onemedic.security.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthEntryPointJwt unauthorizedHandler;
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter     jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,9 +37,13 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/sudo/**").hasRole(UserType.SUPER_ADMIN.name())
-                    .requestMatchers("/api/admin/**").hasRole(UserType.SUPER_ADMIN.name())
+                    .requestMatchers(
+                            "/api/auth/**",
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**").permitAll()
+//                    .requestMatchers("/api/sudo/**").hasRole(UserType.SUPER_ADMIN.name())
+//                    .requestMatchers("/api/admin/**").hasRole(UserType.SUPER_ADMIN.name())
+                    .requestMatchers("/api/sudo/**").hasRole(UserType.ADMIN.name())//delete later
                     .requestMatchers("/api/admin/**").hasRole(UserType.ADMIN.name())
                     .requestMatchers("/api/clinicians/**").hasRole(UserType.CLINICIAN.name())
                     .requestMatchers("/api/patients/**").hasRole(UserType.PATIENT.name())

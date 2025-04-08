@@ -7,6 +7,7 @@ import com.onemedic.models.UserType;
 import com.onemedic.repositories.AdminRepository;
 import com.onemedic.services.SuperAdminService;
 import com.onemedic.utils.UpdateMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class SuperAdminServiceImpl implements SuperAdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public SuperAdminServiceImpl(AdminRepository adminRepository,
-                                 PasswordEncoder passwordEncoder) {
-        this.adminRepository = adminRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+//    @Autowired
+//    public SuperAdminServiceImpl(AdminRepository adminRepository,
+//                                 PasswordEncoder passwordEncoder) {
+//        this.adminRepository = adminRepository;
+//        this.passwordEncoder = passwordEncoder;
+//    }
 
     @Override
     @Transactional

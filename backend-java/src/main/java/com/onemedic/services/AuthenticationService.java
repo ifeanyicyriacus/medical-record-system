@@ -1,12 +1,10 @@
 package com.onemedic.services;
 
-import com.onemedic.dtos.requests.ChangePasswordRequestDto;
-import com.onemedic.dtos.requests.LoginRequestDto;
-import com.onemedic.dtos.responses.ChangePasswordResponseDto;
-import com.onemedic.dtos.responses.LoginResponseDto;
+import com.onemedic.dtos.requests.auth.LoginDto;
+import com.onemedic.dtos.responses.auth.AuthResponse;
 
 
 public interface AuthenticationService {
-    LoginResponseDto login(LoginRequestDto loginRequestDto);
-    ChangePasswordResponseDto changePassword(ChangePasswordRequestDto changePasswordRequestDto);
+    AuthResponse login(LoginDto loginRequestDto);
+//    ChangePasswordResponseDto changePassword(ChangePasswordRequestDto changePasswordRequestDto);
 }
