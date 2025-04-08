@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from enums import AppointmentStatus
+from app.models.enums import AppointmentStatus
 
 @dataclass
 class Appointment:

@@ -1,8 +1,8 @@
 import os
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from models.user import User
-from exceptions.custom_exception import (
+from app.models.user import User
+from app.exceptions.custom_exception import (
     EmailAlreadyExistsException,
     IncorrectLoginCredentialsException,
     MedicalRecordSystemException,
@@ -19,14 +19,23 @@ class UserRepository:
         if self.get_user_by_email(data['email_address']):
             raise EmailAlreadyExistsException(data['email_address'])
 
-        user = User(**data)
-        user.set_password(data['password'])
+        password = data.pop('password', None)
+        if not password:
+            raise MedicalRecordSystemException("Password is required.")
+
+        user = User(**data, hash_password="")
+        user.set_password(password)
 
         try:
             result = self.collection.insert_one(user.__dict__)
-            return self.get_user_by_id(result.inserted_id)
+            user_dict = self.get_user_by_id(result.inserted_id)
+
+            user_dict['_id'] = str(user_dict['_id'])
+
+            return user_dict
         except Exception:
             raise MedicalRecordSystemException("Failed to create user.")
+
 
     def get_user_by_id(self, user_id: str) -> dict:
         user = self.collection.find_one({'_id': ObjectId(user_id)})

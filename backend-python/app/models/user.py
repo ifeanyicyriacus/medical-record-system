@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from enums import Gender, UserRole
+from app.models.enums import Gender, UserRole
 import bcrypt
 
 @dataclass
