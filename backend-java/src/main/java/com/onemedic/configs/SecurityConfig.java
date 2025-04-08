@@ -37,14 +37,9 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                            "/api/auth/**",
-                            "/v3/api-docs/**",
-                            "/swagger-ui/**").permitAll()
-//                    .requestMatchers("/api/sudo/**").hasRole(UserType.SUPER_ADMIN.name())
-//                    .requestMatchers("/api/admin/**").hasRole(UserType.SUPER_ADMIN.name())
-                    .requestMatchers("/api/sudo/**").hasRole(UserType.ADMIN.name())//delete later
-                    .requestMatchers("/api/admin/**").hasRole(UserType.ADMIN.name())
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/sudo/**").hasRole(UserType.SUPER_ADMIN.name())
+                    .requestMatchers("/api/admin/**").hasAnyRole(UserType.SUPER_ADMIN.name(), UserType.ADMIN.name())
                     .requestMatchers("/api/clinicians/**").hasRole(UserType.CLINICIAN.name())
                     .requestMatchers("/api/patients/**").hasRole(UserType.PATIENT.name())
                     .anyRequest().authenticated())

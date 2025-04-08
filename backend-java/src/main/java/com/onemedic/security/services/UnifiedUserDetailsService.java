@@ -32,8 +32,9 @@ public class UnifiedUserDetailsService implements UserDetailsService {
         System.out.println("Searching for email: " + email); // Temporary log
 
 
-        return adminRepository.findByEmail(email).map(admin ->
-                        new AuthUser(admin, UserType.ADMIN))
+        return adminRepository.findByEmail(email).map(admin -> admin.getType().equals(UserType.SUPER_ADMIN)
+                                ? new AuthUser(admin, UserType.SUPER_ADMIN)
+                                : new AuthUser(admin, UserType.ADMIN))
                 .or(() -> {
                     System.out.println("Not fount in admin: " + email);
                     return clinicianRepository.findByEmail(email).map(clinician ->
