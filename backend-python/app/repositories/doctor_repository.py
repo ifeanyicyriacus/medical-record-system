@@ -1,71 +1,53 @@
-from typing import List, Optional
-from werkzeug.security import generate_password_hash
-from app.models.doctor import Doctor
-from app.models.appointment import Appointment
-from app.models.appointment_status import AppointmentStatus
-from app.models.specialization import Specialization
-from .interfaces.doctor_repository import IDoctorRepository
+from app.repositories.user_repository import UserRepository
+from bson.objectid import ObjectId
+from dotenv import load_dotenv
+import os
+from app.exceptions.custom_exception import DoctorNotFoundException, ValidationError, DatabaseError, EmailAlreadyExistsException
+from app.models.user import User
 
-class DoctorRepository(IDoctorRepository):
-    def view_appointments(self) -> List[dict]:
+load_dotenv()
+
+class DoctorRepository(UserRepository):
+    def __init__(self):
+        super().__init__()
+        self.collection = self.db[os.getenv('DOCTORS_COLLECTION')]
+
+    def create_doctor(self, data):
+        return self.create_user(data)
+
+    def get_doctor_by_id(self, doctor_id):
+        doctor = self.get_user_by_id(doctor_id)
+        if not doctor:
+            raise DoctorNotFoundException(doctor_id)
+        return doctor
+
+    def get_all_doctors(self):
         try:
-            appointments = Appointment.objects.all()
-            return [{
-                "id": str(appointment.id),
-                "date": appointment.date,
-                "patient": str(appointment.patient.id),
-                "status": appointment.appointment_status.value,
-                "notes": appointment.doctor_notes
-            } for appointment in appointments]
+            return self.get_users_by_role('doctor')
         except Exception as e:
-            return []
-    
-    def update_appointment_notes(self, appointment_id: str, notes: str) -> bool:
+            raise DatabaseError(f"Error fetching doctors: {str(e)}")
+
+    def get_scheduled_appointments(self, doctor_id):
+        if not self.get_doctor_by_id(doctor_id):
+            raise DoctorNotFoundException(doctor_id)
+        appointments_collection = self.db[os.getenv('APPOINTMENTS_COLLECTION')]
         try:
-            appointment = Appointment.objects.get(appointment_id=appointment_id)
-            appointment.doctor_notes = notes
-            appointment.save()
-            return True
+            return list(appointments_collection.find({'doctor_id': doctor_id}))
         except Exception as e:
-            return False
-    
-    def update_appointment_status(self, appointment_id: str, status: str) -> bool:
+            raise DatabaseError(f"Error fetching scheduled appointments for doctor {doctor_id}: {str(e)}")
+
+    def get_patient_medical_history(self, doctor_id, patient_id):
+        if not self.get_doctor_by_id(doctor_id):
+            raise DoctorNotFoundException(doctor_id)
+        appointments_collection = self.db[os.getenv('APPOINTMENTS_COLLECTION')]
         try:
-            appointment = Appointment.objects.get(appointment_id=appointment_id)
-            appointment.appointment_status = AppointmentStatus[status]
-            appointment.save()
-            return True
+            return list(appointments_collection.find({'doctor_id': doctor_id, 'patient_id': patient_id}))
         except Exception as e:
-            return False
-    
-    def find_by_email(self, email: str) -> Optional[Doctor]:
-        try:
-            return Doctor.objects.get(email_address=email)
-        except Exception as e:
-            return None
-    
-    def find_by_specialization(self, specialization: Specialization) -> List[Doctor]:
-        try:
-            return Doctor.objects(specialization=specialization)
-        except Exception as e:
-            return []
-    
-    def update_profile(self, doctor_id: str, data: dict) -> bool:
-        try:
-            doctor = Doctor.objects.get(doctor_id=doctor_id)
-            for key, value in data.items():
-                if hasattr(doctor, key):
-                    setattr(doctor, key, value)
-            doctor.save()
-            return True
-        except Exception as e:
-            return False
-    
-    def change_password(self, doctor_id: str, new_password: str) -> bool:
-        try:
-            doctor = Doctor.objects.get(doctor_id=doctor_id)
-            doctor.hash_password = generate_password_hash(new_password)
-            doctor.save()
-            return True
-        except Exception as e:
-            return False
+            raise DatabaseError(f"Error fetching medical history for patient {patient_id} by doctor {doctor_id}: {str(e)}")
+
+    def update_doctor_profile(self, doctor_id, profile_data):
+        if not profile_data:
+            raise ValidationError("Profile data cannot be empty")
+        if not self.get_doctor_by_id(doctor_id):
+            raise DoctorNotFoundException(doctor_id)
+        self.collection.update_one({'_id': ObjectId(doctor_id)}, {'$set': profile_data})
