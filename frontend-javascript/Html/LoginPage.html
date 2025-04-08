@@ -13,7 +13,7 @@
                 <img src="../image/logo.png" alt="">
                 <p>saving lives</p>
             </div>
-            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+
             <div class="navLinks">
                 <ul>
                     <li><a href="HomePage.html"> Home</a></li>
@@ -29,7 +29,20 @@
                 <input type="email" id="email" name="email" required>
 
                 <label for="password">Password:</label>
-                <input type="text" id="password" name="password" required>
+                <div class="password-wrapper">
+                <input type="password" id="password" name="password" required>
+                <span  type="click" id="togglePassword" class="eye-icon">👁️</span>
+                </div>
+
+                <div>
+                    <label for="role">Role</label>
+                    <select id="role" name="role" class="form-group" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="Doctor">Doctor</option>
+                        <option value="Patient">Patient</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
 
                 <button type="submit">Log in</button>
             </form>
