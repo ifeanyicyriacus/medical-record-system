@@ -5,17 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.getElementById("password");
 
 
-    togglePassword.addEventListener("click", function () {
-        const currentType = passwordInput.getAttribute("type");
 
-        if (currentType === "password") {
-            passwordInput.setAttribute("type", "text");
-            togglePassword.textContent = "🙈";
-        } else {
-            passwordInput.setAttribute("type", "password");
-            togglePassword.textContent = "👁️";
-        }
-    });
 
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -23,59 +13,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
         errorMessage.textContent = "";
 
-        const name = document.getElementById("email").value;
-        const email = document.getElementById("password").value;
+        const email = document.getElementById("email").value;
+        const password = passwordInput.value
 
-        if (name === "" || email === "") {
+        if (email === "" || password === "") {
             errorMessage.textContent = "⚠️ Please fill in all fields!";
             return;
         }
 
 
         const formData = {
-            name: name,
-            email: email
+            email: email,
+            password: password
         };
-        const roleSelect = document.getElementById("role")
-
-        const endpointMap = {
-            Doctor: "/api/register/doctor",
-            Admin: "/api/register/admin",
-            Patient: "/api/register/patient"
-        };
-
-        const endpoint = endpointMap[roleSelect.value]
         try {
-            const response = await fetch(`http://localhost:8080${endpoint}`, {
+            const response = await fetch(`http://127.0.0.1:8000/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData)
-            }).then(response =>{
-                if(response.ok){
-                    if(roleSelect.value === "Patient"){
-                        window.location.href = "../Html/PatientDashBoard.html"
-                    }else if (roleSelect.value === "Doctor"){
-                        window.location.href = "../Html/StaffDashBoard.html"
-                    }else {
-                        window.location.href = "../Html/AdminDashBoard.html"
-                    }
-                }else{
-                    errorMessage.textContent = "Login Failed!!!"
-                }
-            })
+            });
 
             const result = await response.json();
-            console.log("Server Response:", result);
 
-            if (!response.ok) {
-                errorMessage.textContent = `⚠️ ${result.message || "Login failed!"}`;
-                return;
+            if (!result.ok) {
+                errorMessage.style.color = "red";
+                errorMessage.textContent = result.error;
+            }else{
+                errorMessage.style.color = "green";
+                errorMessage.textContent = "✅ Login successful!";
+                if(result.role.value === "Doctor"){
+                    window.location.href ="../Html/StaffDashBoard.html"
+                }else if(result.role.value === "Patient"){
+                    window.location.href ="../Html/PatientDashBoard.html"
+                }else{
+                    window.location.href="../Html/AdminDashBoard.html"
+                }
             }
 
-            errorMessage.style.color = "green";
-            errorMessage.textContent = "✅ Login successful!";
 
         } catch (error) {
             console.error("Error:", error);
