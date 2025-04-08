@@ -16,27 +16,27 @@ public class SuperAdminController {
         this.superAdminService = superAdminService;
     }
 
-    @GetMapping
-    public Page<Admin> getAllAdmins(Pageable pageable, @PathVariable String id) {
-        return this.superAdminService.getAllAdmins(pageable);
-    }
-
-    @GetMapping("/{adminId}")
-    public Admin getAdmin(@PathVariable String id, @PathVariable String adminId) {
-        return superAdminService.getAdminById(adminId);
-    }
-
-    @GetMapping("/{email}")
-    public Admin getAdminByEmail(@PathVariable String email, @PathVariable String id) {
-        return superAdminService.getAdminByEmail(email);
-    }
-
-    @PostMapping
+    @PostMapping("/admins")
     public Admin createAdmin(@RequestBody Admin admin) {
         return superAdminService.createAdmin(admin);
     }
 
-    @PutMapping("/{adminId}")
+    @GetMapping("/admins")
+    public Page<Admin> getAllAdmins(Pageable pageable, @PathVariable String id) {
+        return this.superAdminService.getAllAdmins(pageable);
+    }
+
+    @GetMapping("/admins?id={adminId}")
+    public Admin getAdmin(@PathVariable String id, @PathVariable String adminId) {
+        return superAdminService.getAdminById(adminId);
+    }
+
+    @GetMapping("/admins?email={email}")
+    public Admin getAdminByEmail(@PathVariable String email, @PathVariable String id) {
+        return superAdminService.getAdminByEmail(email);
+    }
+
+    @PutMapping("admins/{adminId}")
     public Admin updateAdmin(@PathVariable String id, @PathVariable String adminId,
                              @RequestBody Admin adminDetails) {
         return superAdminService.updateAdmin(adminId, adminDetails);
