@@ -9,5 +9,5 @@ class Appointment:
     patient_id: int
     doctor_id: int
     appointment_status: AppointmentStatus
-    student_notes: str = ""
+    patient_notes: str = ""
     doctor_notes: str = ""

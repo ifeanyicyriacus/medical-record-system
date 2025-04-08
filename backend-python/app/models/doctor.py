@@ -7,4 +7,5 @@ from enums import Specialization
 class Doctor(User):
     doctor_id: int
     specialization: Specialization
+    medical_license: str
     appointments: List[int] = field(default_factory=list)

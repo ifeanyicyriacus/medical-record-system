@@ -1,27 +1,64 @@
+import os
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from models.user import User
-from custom_exceptions import MedicalRecordSystemException
+from exceptions.custom_exception import (
+    EmailAlreadyExistsException,
+    IncorrectLoginCredentialsException,
+    MedicalRecordSystemException,
+    PatientNotFoundException
+)
 
 class UserRepository:
-    def __init__(self, db, collection_name):
-        self.collection = db[collection_name]
+    def __init__(self):
+        self.client = MongoClient(os.getenv('MONGO_URI'))
+        self.db = self.client[os.getenv('DB_NAME')]
+        self.collection = self.db[os.getenv('USERS_COLLECTION')]
 
-    def create_user(self, user: User):
-        self.collection.insert_one(user.__dict__)
+    def create_user(self, data: dict) -> dict:
+        if self.get_user_by_email(data['email_address']):
+            raise EmailAlreadyExistsException(data['email_address'])
 
-    def get_user_by_id(self, user_id: str) -> User:
-        data = self.collection.find_one({"_id": ObjectId(user_id)})
-        if not data:
-            raise MedicalRecordSystemException(f"User with ID {user_id} not found.")
-        return User(**data)
+        user = User(**data)
+        user.set_password(data['password'])
 
-    def update_user(self, user_id: str, update_data: dict):
-        result = self.collection.update_one({"_id": ObjectId(user_id)}, {"$set": update_data})
-        if result.matched_count == 0:
-            raise MedicalRecordSystemException(f"User with ID {user_id} not found.")
+        try:
+            result = self.collection.insert_one(user.__dict__)
+            return self.get_user_by_id(result.inserted_id)
+        except Exception:
+            raise MedicalRecordSystemException("Failed to create user.")
 
-    def delete_user(self, user_id: str):
-        result = self.collection.delete_one({"_id": ObjectId(user_id)})
-        if result.deleted_count == 0:
-            raise MedicalRecordSystemException(f"User with ID {user_id} not found.")
+    def get_user_by_id(self, user_id: str) -> dict:
+        user = self.collection.find_one({'_id': ObjectId(user_id)})
+        if not user:
+            raise PatientNotFoundException(user_id)
+        return user
+
+    def get_user_by_email(self, email: str) -> dict:
+        return self.collection.find_one({'email_address': email})
+
+    def update_user(self, user_id: str, data: dict) -> None:
+        try:
+            self.collection.update_one({'_id': ObjectId(user_id)}, {'$set': data})
+        except Exception:
+            raise MedicalRecordSystemException("Failed to update user.")
+
+    def delete_user(self, user_id: str) -> None:
+        try:
+            self.collection.delete_one({'_id': ObjectId(user_id)})
+        except Exception:
+            raise MedicalRecordSystemException("Failed to delete user.")
+
+    def get_users_by_role(self, role: str) -> list:
+        return list(self.collection.find({'role': role}))
+
+    def login_user(self, email: str, password: str) -> User:
+        user_data = self.get_user_by_email(email)
+        if not user_data:
+            raise IncorrectLoginCredentialsException()
+
+        user = User(**user_data)
+        if not user.check_password(password):
+            raise IncorrectLoginCredentialsException()
+
+        return user

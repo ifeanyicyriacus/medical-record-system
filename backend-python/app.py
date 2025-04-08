@@ -13,17 +13,14 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-
 mongo_uri = os.getenv('MONGO_URI')
-secret_key = os.getenv('SECRET_KEY')
+db_name = os.getenv('DB_NAME')
 
-if not mongo_uri or not secret_key:
-    raise ValueError("Please set the MONGO_URI and SECRET_KEY environment variables")
+if not mongo_uri or not db_name:
+    raise ValueError("Please set the MONGO_URI and DB_NAME environment variables")
 
 client = MongoClient(mongo_uri)
-db = client.get_database()
-
-app.config['SECRET_KEY'] = secret_key
+db = client[db_name]
 
 app.register_blueprint(patient_bp)
 app.register_blueprint(doctor_bp)
@@ -31,4 +28,4 @@ app.register_blueprint(appointment_bp)
 app.register_blueprint(admin_bp, url_prefix='/admin')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=8000, debug=True)
