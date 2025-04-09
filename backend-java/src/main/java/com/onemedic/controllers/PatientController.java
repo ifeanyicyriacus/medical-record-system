@@ -28,9 +28,9 @@ public class PatientController {
         return patientService.updateAppointment(appointmentId, appointmentDetails);
     }
 
-    @GetMapping("/appointments/{patientId}")
-    public Page<Appointment> getAllAppointmentsByPatientId(@PathVariable String id, @PathVariable String patientId, Pageable pageable) {
-        return patientService.getAllAppointmentsByPatientId(patientId, pageable);
+    @GetMapping("/appointments")
+    public Page<Appointment> getAllMyAppointments(@PathVariable String id, Pageable pageable) {
+        return patientService.getAllMyAppointments(id, pageable);
     }
 
     @GetMapping("/medical-record")

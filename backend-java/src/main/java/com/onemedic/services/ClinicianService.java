@@ -16,8 +16,7 @@ public interface ClinicianService {
     Appointment createAppointment(Appointment appointment);
     Appointment getAppointmentById(String id);
     Appointment updateAppointment(String id, Appointment appointmentDetails);
-    Page<Appointment> getAllAppointments(Pageable pageable);
-    Page<Appointment> getAllMyAppointmentsByClinicianId(String clinicianId, Pageable pageable);
+    Page<Appointment> getAllMyAppointments(String clinicianId, Pageable pageable);
 
     MedicalRecord getPatientMedicalRecord(String patientId);
     MedicalRecord.MedicalNote addMedicalNoteToRecord(String patientId, MedicalRecord.MedicalNote medicalNote);

@@ -1,5 +1,6 @@
 package com.onemedic.controllers;
 
+import com.onemedic.models.Appointment;
 import com.onemedic.models.Clinician;
 import com.onemedic.services.AdminService;
 import com.onemedic.services.impl.AdminServiceImpl;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admins/{id}/clinicians")
 public class AdminController {
-    private final AdminService adminService;
+    private final AdminService       adminService;
 
     public AdminController(AdminServiceImpl adminService) {
         this.adminService = adminService;
@@ -40,5 +41,16 @@ public class AdminController {
     public Clinician updateClinician(@PathVariable String id, @PathVariable String clinicianId,
                                      @RequestBody Clinician clinicianDetails) {
         return adminService.updateClinician(clinicianId, clinicianDetails);
+    }
+
+    @GetMapping("/appointments")
+    public Page<Appointment> getAllAppointments(@PathVariable String id, Pageable pageable) {
+        return adminService.getAllAppointments(pageable);
+    }
+
+    @GetMapping("/{clinicianId}/appointments")
+    public Page<Appointment> getAllAppointmentsByClinicianId(@PathVariable String id, @PathVariable String clinicianId,
+                                                             Pageable pageable) {
+        return adminService.getAllAppointmentsByClinicianId(clinicianId, pageable);
     }
 }

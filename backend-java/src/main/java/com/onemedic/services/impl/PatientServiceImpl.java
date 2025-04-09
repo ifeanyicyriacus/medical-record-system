@@ -45,7 +45,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Page<Appointment> getAllAppointmentsByPatientId(String patientId, Pageable pageable) {
+    public Page<Appointment> getAllMyAppointments(String patientId, Pageable pageable) {
         return appointmentRepository.findAllByPatientId(patientId, pageable);
     }
 

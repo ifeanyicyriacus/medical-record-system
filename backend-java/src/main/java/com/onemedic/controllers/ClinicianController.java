@@ -44,8 +44,6 @@ public class ClinicianController {
     }
 
 
-
-
     @PostMapping("/appointments")
     public Appointment createAppointment(@PathVariable String id, @RequestBody Appointment appointment) {
         return clinicianService.createAppointment(appointment);
@@ -58,15 +56,9 @@ public class ClinicianController {
     }
 
     @GetMapping("/appointments")
-    public Page<Appointment> getAllAppointments(@PathVariable String id, Pageable pageable) {
-        return clinicianService.getAllAppointments(pageable);
-    }
-
-    @GetMapping("/appointments")
     public Page<Appointment> getAllAppointmentsByClinicianId(@PathVariable String id, Pageable pageable) {
-        return clinicianService.getAllMyAppointmentsByClinicianId(id, pageable);
+        return clinicianService.getAllMyAppointments(id, pageable);
     }
-
 
 
     @GetMapping("/medical-records/{patientId}")

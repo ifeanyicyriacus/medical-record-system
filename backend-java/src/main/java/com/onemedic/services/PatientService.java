@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface PatientService {
     Appointment createAppointment(Appointment appointment);
     Appointment updateAppointment(String id, Appointment appointmentDetails);
-    Page<Appointment> getAllAppointmentsByPatientId(String patientId, Pageable pageable);
+    Page<Appointment> getAllMyAppointments(String patientId, Pageable pageable);
     MedicalRecord getMedicalRecord(String patientId);
 }
