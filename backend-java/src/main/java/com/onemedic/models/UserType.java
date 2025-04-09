@@ -1,7 +1,5 @@
 package com.onemedic.models;
 
 public enum UserType {
-    ADMINISTRATOR,
-    CLINICAL_STAFF,
-    PATIENT
+    SUPER_ADMIN, ADMIN, CLINICIAN, PATIENT
 }
