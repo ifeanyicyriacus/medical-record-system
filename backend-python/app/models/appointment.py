@@ -1,13 +1,13 @@
-from mongoengine import Document, StringField, DateTimeField, ReferenceField, EnumField
-from .appointment_status import AppointmentStatus
+from dataclasses import dataclass
+from datetime import datetime
+from app.models.enums import AppointmentStatus
 
-class Appointment(Document):
-    meta = {'collection': 'appointments'}
-    
-    appointment_id = StringField(required=True, unique=True)
-    date = DateTimeField(required=True)
-    patient = ReferenceField('Patient', required=True)
-    doctor = ReferenceField('Doctor', required=True)
-    appointment_status = EnumField(AppointmentStatus, default=AppointmentStatus.SCHEDULED)
-    student_notes = StringField()
-    doctor_notes = StringField()
+@dataclass
+class Appointment:
+    appointment_id: int
+    date: datetime
+    patient_id: int
+    doctor_id: int
+    appointment_status: AppointmentStatus
+    patient_notes: str = ""
+    doctor_notes: str = ""

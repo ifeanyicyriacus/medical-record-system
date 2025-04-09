@@ -1,16 +1,21 @@
-from mongoengine import Document, StringField, DateTimeField, EnumField
-from .gender import Gender
+from dataclasses import dataclass
+from datetime import datetime
+from app.models.enums import Gender, UserRole
+import bcrypt
 
-class User(Document):
-    meta = {
-        'abstract': True,
-        'allow_inheritance': True
-    }
-    
-    first_name = StringField(required=True)
-    last_name = StringField(required=True)
-    hash_password = StringField(required=True)
-    phone_number = StringField()
-    email_address = StringField(required=True, unique=True)
-    dob = DateTimeField()
-    gender = EnumField(Gender)
+@dataclass
+class User:
+    first_name: str
+    last_name: str
+    hash_password: str
+    phone_number: str
+    email_address: str
+    dob: datetime
+    gender: Gender
+    role: UserRole
+
+    def set_password(self, password: str):
+        self.hash_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    def check_password(self, password: str) -> bool:
+        return bcrypt.checkpw(password.encode('utf-8'), self.hash_password.encode('utf-8'))

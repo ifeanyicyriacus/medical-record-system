@@ -1,43 +1,33 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("myForm");
     const errorMessage = document.getElementById("error-message");
-
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");
 
 
-    togglePassword.addEventListener("click", function () {
-        const currentType = passwordInput.getAttribute("type");
 
-        if (currentType === "password") {
-            passwordInput.setAttribute("type", "text");
-            togglePassword.textContent = "🙈";
-        } else {
-            passwordInput.setAttribute("type", "password");
-            togglePassword.textContent = "👁️";
-        }
-    });
 
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+
         errorMessage.textContent = "";
 
         const email = document.getElementById("email").value;
-        const password = passwordInput.value;
+        const password = passwordInput.value
 
         if (email === "" || password === "") {
             errorMessage.textContent = "⚠️ Please fill in all fields!";
             return;
         }
 
+
         const formData = {
             email: email,
             password: password
         };
-
         try {
-            const response = await fetch("http://localhost:5000/login", {
+            const response = await fetch(`http://127.0.0.1:8000/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -46,15 +36,23 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             const result = await response.json();
-            console.log("Server Response:", result);
 
-            if (!response.ok) {
-                errorMessage.textContent = `⚠️ ${result.message || "Login failed!"}`;
-                return;
+            if (!result.ok) {
+                errorMessage.style.color = "red";
+                errorMessage.textContent = result.error;
+            }else{
+                errorMessage.style.color = "green";
+                errorMessage.textContent = "✅ Login successful!";
+                if(result.role.value === "Doctor"){
+                    window.location.href ="../Html/StaffDashBoard.html"
+                }else if(result.role.value === "Patient"){
+                    window.location.href ="../Html/PatientDashBoard.html"
+                }else{
+                    window.location.href="../Html/AdminDashBoard.html"
+                }
             }
 
-            errorMessage.style.color = "green";
-            errorMessage.textContent = "✅ Login successful!";
+
         } catch (error) {
             console.error("Error:", error);
             errorMessage.textContent = "⚠️ Failed to connect to the server.";
