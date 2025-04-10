@@ -77,12 +77,7 @@ public class ClinicianServiceImpl implements ClinicianService {
     }
 
     @Override
-    public Page<Appointment> getAllAppointments(Pageable pageable) {
-        return appointmentRepository.findAll(pageable);
-    }
-
-    @Override
-    public Page<Appointment> getAllMyAppointmentsByClinicianId(String clinicianId, Pageable pageable) {
+    public Page<Appointment> getAllMyAppointments(String clinicianId, Pageable pageable) {
         return appointmentRepository.findAllByClinicianId(clinicianId, pageable);
     }
 

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/sudo/{id}")
+@RequestMapping("/api/sudo/{id}/admins")
 public class SuperAdminController {
     private final SuperAdminService superAdminService;
 
@@ -21,19 +21,19 @@ public class SuperAdminController {
         return this.superAdminService.getAllAdmins(pageable);
     }
 
-    @GetMapping("/{adminId}")
-    public Admin getAdmin(@PathVariable String id, @PathVariable String adminId) {
-        return superAdminService.getAdminById(adminId);
-    }
-
-    @GetMapping("/{email}")
-    public Admin getAdminByEmail(@PathVariable String email, @PathVariable String id) {
-        return superAdminService.getAdminByEmail(email);
-    }
-
     @PostMapping
     public Admin createAdmin(@RequestBody Admin admin) {
         return superAdminService.createAdmin(admin);
+    }
+
+    @GetMapping("?id={adminId}")
+    public Admin getAdminById(@PathVariable String id, @PathVariable String adminId) {
+        return superAdminService.getAdminById(adminId);
+    }
+
+    @GetMapping("?email={email}")
+    public Admin getAdminByEmail(@PathVariable String email, @PathVariable String id) {
+        return superAdminService.getAdminByEmail(email);
     }
 
     @PutMapping("/{adminId}")
