@@ -71,14 +71,76 @@ body {
 
 
 .top-display{
-    padding: 50px 20px;
+    margin-top: 60px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: transform 0.2s ease;
 }
+
+.top-display:active {
+    transform: scale(1.1) translateY(-10px);
+}
+
 .vital-check{
+    margin-top:20px;
+    padding: 50px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     color: #e2e8f0;
 }
 
+.vital-check-details{
+    margin-top: 20px;
+    color: White;
+    padding-left: 20px;
+}
+
+.row{
+    position: relative;
+    margin-top: 70px;
+}
+
+.book-appointment{
+    width: 300px;
+    margin-left: 100px;
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
 
+    a {
+        color: Black;
+        text-decoration: none;
+        font: 14px bold;
+    }
+}
+
+.book-appointment:hover{
+    transform: scale(1.1);
+    background-color: #002CF2;
+    border: none;
+}
+
+.medical-history{
+    width: 300px;
+    margin-left: 400px;
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    a {
+        color: Black;
+        text-decoration: none;
+        font: 14px bold;
+    }
+}
+
+.medical-history:hover{
+    transform: scale(1.1);
+    background-color: #002CF2;
+    border: none;
+}
+
+.row:active{
+    transform: scale(0.98);
+}
 
 @media (max-width: 768px) {
     .menu-icon {
@@ -99,6 +161,9 @@ body {
     .navLinks a{
         display: block;
         font-size: 18px;
+
+    }
+    .row{
 
     }
 }
