@@ -4,16 +4,16 @@
     font-family: Arial, sans-serif;
 }
 
-body {
+
+body{
     background-color: #5C73DA;
 }
-
 
 .navBar {
     padding: 0 50px;
     display: flex;
     align-items: center;
-    background: #5C73DA;
+    background-color: #5C73DA;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -49,7 +49,7 @@ body {
 }
 
 .navBar ul li {
-    margin-left: 20px;
+    margin-left: 18px;
 }
 
 .navBar ul li a {
@@ -63,85 +63,97 @@ body {
 }
 
 .about-us{
-
     border: 1px solid Black;
-
-
 }
 
 
-.top-display{
-    margin-top: 60px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.2);
-    transition: transform 0.2s ease;
-}
 
-.top-display:active {
-    transform: scale(1.1) translateY(-10px);
-}
-
-.vital-check{
-    margin-top:20px;
-    padding: 50px 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    color: #e2e8f0;
-}
-
-.vital-check-details{
-    margin-top: 20px;
-    color: White;
-    padding-left: 20px;
-}
-
-.row{
-    position: relative;
-    margin-top: 70px;
-}
-
-.book-appointment{
-    width: 300px;
-    margin-left: 100px;
-    padding: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-
-    a {
-        color: Black;
-        text-decoration: none;
-        font: 14px bold;
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
     }
 }
 
-.book-appointment:hover{
+.last-check-setting{
+    background-color: rgba(0, 44, 242, 0.17);
+    padding: 30px;
+    animation: slideIn 2s ease-out;
+}
+
+.last-check{
+    font-size: 20px;
+    background-color: rgba(0, 44, 242, 0.17);
+    padding: 10px;
+    color: #007BFF;
+}
+.last-check-detail{
+    margin-top: 10px;
+    color: #002CF2;
+}
+.nav-btn:hover{
     transform: scale(1.1);
     background-color: #002CF2;
     border: none;
 }
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.form-group {
+    flex: 1;
+    min-width: 250px;
+}
+#appointment-form{
+    align-items: center;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 30px auto;
+    width: 90%;
+}
+.content-section {
+    display: none;
+    margin-left: 280px;
+    background-color: white;
+    padding: 20px;
+    min-height: calc(100vh - 60px);
+}
 
-.medical-history{
-    width: 300px;
-    margin-left: 400px;
+.content-section.active {
+    display: block;
+}
+
+
+
+.sideBar {
+    position: fixed;
+    width: 280px;
+    z-index: 1000;
+    background-color: rgba(71, 100, 224, 0.69);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    height: 100vh;
+}
+
+.display{
+    background-color: #e2e8f0;
+    width: auto;
+    height: fit-content;
+    margin-left: 330px;
+}
+
+.nav-btn{
+    border-radius:5px;
+    width: 205px;
     padding: 30px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    a {
-        color: Black;
-        text-decoration: none;
-        font: 14px bold;
-    }
 }
-
-.medical-history:hover{
-    transform: scale(1.1);
-    background-color: #002CF2;
-    border: none;
-}
-
-.row:active{
-    transform: scale(0.98);
-}
-
 @media (max-width: 768px) {
     .menu-icon {
         display: block;
