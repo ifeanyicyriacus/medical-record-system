@@ -16,30 +16,70 @@
 
             <div class="navLinks">
                 <ul>
-                    <li><a href="#"> Home</a></li>
                     <li><a href="#"> About us</a></li>
                     <li><a href="#"> Contact us</a></li>
                     <li><a href="#"> Blog</a></li>
                 </ul>
             </div>
         </div>
-        <div class="top-display">
-            <div class="vital-check">
-                <p>Last vital check</p>
+        </div>
+        <div class="sideBar">
+            <p id="home" class="nav-btn">Home</p>
+            <p id="book" class="nav-btn">Book Appointment</p>
+            <p id="records" class="nav-btn">View Medical Records</p>
+            <p id="appointments" class="nav-btn">View Appointment</p>
+        </div>
+
+        <div id="home-content" class="content-section active">
+            <div class="last-check-setting">
+                <p class="last-check">Vital Check</p>
+                <div id="last-check" class="last-check-detail"></div>
             </div>
-            <div id="vital-check" class="vital-check-details">
-            </div>
+
+
         </div>
 
-        <div class="row">
-            <button class="book-appointment"><a href="#">Book Appointment</a></button>
-            <button class="medical-history"><a href="#">View Medical Records</a></button>
+        <div id="book-content" class="content-section">
+                <form id="appointment-form" >
+                    <h2 class="book-appointment">Book an Appointment</h2>
+                    <div class="form">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" placeholder="Enter your full name" required>
+
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email address" required>
+
+                        <label for="date">Appointment Date</label>
+                        <input type="date" id="date" required>
+
+                        <label for="time">Preferred Time</label>
+                        <input type="time" id="time" required>
+
+                        <label for="doctor">Select Problem</label>
+                        <select id="doctor" required>
+                            <option value="">-- Choose Doctor --</option>
+                            <option value="dr-smith">General Check up</option>
+                            <option value="dr-brown">Pediatrician</option>
+                            <option value="dr-lee">Cardiologist</option>
+                        </select>
+
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Describe your symptoms or concerns..."></textarea>
+                    </div>
+                    <button type="submit">Submit Appointment</button>
+
+                </form>
+            </section>
+
         </div>
 
-        <div class="row">
-            <button class="view-appointment"><a href="#">View Appointment</a></button>
+        <div id="records-content" class="content-section">
+            <p>View your medical records here.</p>
         </div>
 
+        <div id="appointments-content" class="content-section">
+            <p>View your appointments here.</p>
     </div>
+
 </body>
 </html>
